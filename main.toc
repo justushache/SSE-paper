@@ -1,0 +1,28 @@
+\babel@toc {ngerman}{}\relax 
+\contentsline {section}{\numberline {1}Einleitung}{4}{section.1}%
+\contentsline {section}{\numberline {2}Beschreibung des Algorithmus}{5}{section.2}%
+\contentsline {paragraph}{\nonumberline Eingabe}{5}{paragraph*.1}%
+\contentsline {paragraph}{\nonumberline Ausgabe}{5}{paragraph*.2}%
+\contentsline {paragraph}{\nonumberline Implementierung}{5}{paragraph*.3}%
+\contentsline {subsection}{\numberline {2.1}Arithmetik}{5}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Entwurf}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Unoptimierter Datenflussgraph}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Optimierter Datenflussgraph}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Datenpfadarchitektur}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Registertransferfolgen}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Zustandsgraph}{8}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Gesamtschaltung}{8}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Simulation}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Verifikation}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Schaltungssynthese}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Layoutsynthese}{9}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Zusammenfassung}{10}{section.5}%
+\contentsline {section}{\numberline {A}Quellcode}{11}{appendix.1.A}%
+\contentsline {subsection}{\numberline {A.1}Referenzimplementierung}{11}{subsection.1.A.1}%
+\contentsline {subsection}{\numberline {A.2}FSM}{11}{subsection.1.A.2}%
+\contentsline {subsection}{\numberline {A.3}Controllogic}{11}{subsection.1.A.3}%
+\contentsline {section}{\numberline {B}Reports}{12}{appendix.1.B}%
+\contentsline {subsection}{\numberline {B.1}Area}{12}{subsection.1.B.1}%
+\contentsline {subsection}{\numberline {B.2}Power}{12}{subsection.1.B.2}%
+\contentsline {subsection}{\numberline {B.3}Timing}{12}{subsection.1.B.3}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

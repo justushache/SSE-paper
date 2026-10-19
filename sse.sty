@@ -1,0 +1,65 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sse}[SSE Styles]
+
+% PDF Infos
+\RequirePackage[top=2cm,bottom=2cm,left=3cm,right=3cm]{geometry}
+\directlua{pdf.setminorversion(7)} % Use a newer PDF Version
+
+% Some defaults
+\setlength{\footskip}{1cm} % move line number 1 cm up
+\AddToHook{cmd/section/before}{\clearpage} % start every section on new page
+
+% Useful packages
+\RequirePackage{babel} % language is set in documentclass, dont set it here
+\RequirePackage[pdfa]{hyperref}
+% PDF Metadata
+\AtBeginDocument{
+    \hypersetup{
+    	pdftitle={Praktikum Schaltkreis- und Systementwurf (SSE)},
+    	pdfauthor={\@author},
+    	pdfsubject={Praktikumsbericht},
+    }
+}
+
+\RequirePackage{graphicx,float} % for graphics
+\RequirePackage{mathtools} % loads amsmath and does some more magic
+\RequirePackage{fontspec} % replaces the old fontenc and inputenc
+
+% https://tex.stackexchange.com/questions/3445/latex-tables-how-do-i-make-thicker-or-thinner-horizontal-lines-typically-hlin
+\def\hlinewd#1{%
+\noalign{\ifnum0=`}\fi\hrule \@height #1 %
+\futurelet\reserved@a\@xhline}
+
+% listings
+\RequirePackage{xcolor}
+\RequirePackage{listings}
+\lstdefinestyle{CodeStyle}{
+	backgroundcolor=\color{white},   
+	commentstyle=\color{purple!40!black},
+	keywordstyle=\color{green!40!black},
+	numberstyle=\tiny\color{gray},
+	stringstyle=\color{purple},
+	identifierstyle=\color{blue},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+}
+
+% bibliography
+\RequirePackage[style=alphabetic,backend=biber,bibliography=totoc]{biblatex}
+\RequirePackage{csquotes}
+\addbibresource{literatur.bib}
+%\setcounter{biburllcpenalty}{7000} % break urls after Lower case
+%\setcounter{biburlucpenalty}{8000} % break urls after Upper case
+
+% appendix
+\RequirePackage[page]{appendix}
+\renewcommand\appendixpagename{Appendix}
