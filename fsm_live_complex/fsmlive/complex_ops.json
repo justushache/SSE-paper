@@ -1,0 +1,146 @@
+{
+  "title": "Complex substates  (FP_A/FP_B operands, FP_C write-back; scratch rd)",
+  "substates": {
+    "CMUL": {
+      "params": [
+        "a",
+        "b",
+        "d"
+      ],
+      "states": [
+        {
+          "id": "CMUL1",
+          "rt": [
+            "{a},r -> FP_A -> FP_MUL",
+            "{b},r -> FP_B -> FP_MUL"
+          ],
+          "next": "CMUL2"
+        },
+        {
+          "id": "CMUL2",
+          "rt": [
+            "{a},i -> FP_A -> FP_MUL",
+            "{b},i -> FP_B -> FP_MUL",
+            "FP_MUL -> FP_C -> rd,r  (ar·br)"
+          ],
+          "next": "CMUL3"
+        },
+        {
+          "id": "CMUL3",
+          "rt": [
+            "{a},r -> FP_A -> FP_MUL",
+            "{b},i -> FP_B -> FP_MUL",
+            "FP_MUL -> FP_C -> rd,i  (ai·bi)"
+          ],
+          "next": "CMUL4"
+        },
+        {
+          "id": "CMUL4",
+          "rt": [
+            "rd,r -> FP_A ->  FP_ALU(-)",
+            "rd,i -> FP_B ->  FP_ALU(-)",
+            "FP_MUL -> FP_C -> rd,r  (ar·bi)"
+          ],
+          "next": "CMUL5"
+        },
+        {
+          "id": "CMUL5",
+          "rt": [
+            "{a},i -> FP_A -> FP_MUL",
+            "{b},r -> FP_B -> FP_MUL",
+            " FP_ALU -> FP_C -> {d},r  (Re)"
+          ],
+          "next": "CMUL6"
+        },
+        {
+          "id": "CMUL6",
+          "rt": [
+            "FP_MUL -> FP_C -> rd,i  (ai·br)"
+          ],
+          "next": "CMUL7"
+        },
+        {
+          "id": "CMUL7",
+          "rt": [
+            "rd,r -> FP_A ->  FP_ALU(+)",
+            "rd,i -> FP_B ->  FP_ALU(+)"
+          ],
+          "next": "CMUL8"
+        },
+        {
+          "id": "CMUL8",
+          "rt": [
+            " FP_ALU -> FP_C -> {d},i  (Im)"
+          ],
+          "next": "RET"
+        }
+      ]
+    },
+    "CADD": {
+      "params": [
+        "a",
+        "b",
+        "d"
+      ],
+      "states": [
+        {
+          "id": "CADD1",
+          "rt": [
+            "{a},r -> FP_A ->  FP_ALU(+)",
+            "{b},r -> FP_B ->  FP_ALU(+)"
+          ],
+          "next": "CADD2"
+        },
+        {
+          "id": "CADD2",
+          "rt": [
+            "{a},i -> FP_A ->  FP_ALU(+)",
+            "{b},i -> FP_B ->  FP_ALU(+)",
+            " FP_ALU -> FP_C -> {d},r  (Re)"
+          ],
+          "next": "CADD3"
+        },
+        {
+          "id": "CADD3",
+          "rt": [
+            " FP_ALU -> FP_C -> {d},i  (Im)"
+          ],
+          "next": "RET"
+        }
+      ]
+    },
+    "CSUB": {
+      "params": [
+        "a",
+        "b",
+        "d"
+      ],
+      "states": [
+        {
+          "id": "CSUB1",
+          "rt": [
+            "{a},r -> FP_A ->  FP_ALU(-)",
+            "{b},r -> FP_B ->  FP_ALU(-)"
+          ],
+          "next": "CSUB2"
+        },
+        {
+          "id": "CSUB2",
+          "rt": [
+            "{a},i -> FP_A ->  FP_ALU(-)",
+            "{b},i -> FP_B ->  FP_ALU(-)",
+            " FP_ALU -> FP_C -> {d},r  (Re)"
+          ],
+          "next": "CSUB3"
+        },
+        {
+          "id": "CSUB3",
+          "rt": [
+            " FP_ALU -> FP_C -> {d},i  (Im)"
+          ],
+          "next": "RET"
+        }
+      ]
+    }
+  }
+}

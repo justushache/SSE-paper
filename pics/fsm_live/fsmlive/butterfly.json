@@ -1,0 +1,254 @@
+{
+  "title": "FFT",
+  "include": [
+    "complex_ops.json"
+  ],
+  "states": [
+    {
+      "id": "SETUP1",
+      "rt": [
+        "1 -> C -> sp"
+      ],
+      "next": "SETUP2"
+    },
+    {
+      "id": "SETUP2",
+      "rt": [
+        "2^(len) -> C -> N"
+      ],
+      "next": "OL1"
+    },
+    {
+      "id": "OL_TEST1",
+      "rt": [
+        "sp -> A ->ALU(-)",
+        "N -> B -> ALU(-)"
+      ],
+      "next": "OL_TEST2"
+    },
+    {
+      "id": "OL_TEST2",
+      "rt": [
+        ""
+      ],
+      "next": {
+        "ALU,N = 0": "FINISH",
+        "ALU,N = 1": "OL1"
+      }
+    },
+    {
+      "id": "OL1",
+      "rt": [
+        "sp -> C ->h"
+      ],
+      "next": "OL2"
+    },
+    {
+      "id": "OL2",
+      "rt": [
+        "sp -> A ->ALU(+)",
+        "sp -> B ->ALU(+)"
+      ],
+      "next": "OL3"
+    },
+    {
+      "id": "OL3",
+      "rt": [
+        "ALU(+) -> C -> sp"
+      ],
+      "next": "OL4"
+    },
+    {
+      "id": "OL4",
+      "rt": [
+        "sp-> A -> do_gen(real)"
+      ],
+      "next": "OL5"
+    },
+    {
+      "id": "OL5",
+      "rt": [
+        "do_gen(real) -> FP_C -> do,r",
+        "sp-> A -> do_gen(imag)"
+      ],
+      "next": "OL6"
+    },
+    {
+      "id": "OL6",
+      "rt": [
+        "do_gen(imag) -> FP_C -> do,i",
+        "0 -> C -> k"
+      ],
+      "next": "ML_TEST1"
+    },
+    {
+      "id": "ML_TEST1",
+      "rt": [
+        "k -> A -> ALU(-)",
+        "N -> B -> ALU(-)"
+      ],
+      "next": "ML_TEST2"
+    },
+    {
+      "id": "ML_TEST2",
+      "rt": [
+        ""
+      ],
+      "next": {
+        "ALU,N = 1": "ML1",
+        "ALU,N = 0": "OL_TEST1"
+      }
+    },
+    {
+      "id": "ML1",
+      "rt": [
+        "1.0 -> FP_C -> o,r",
+        "k -> C -> j"
+      ],
+      "next": "ML2"
+    },
+    {
+      "id": "ML2",
+      "rt": [
+        "0.0 -> FP_C -> o,i",
+        "k -> A -> ALU(+)",
+        "h -> B -> ALU(+)"
+      ],
+      "next": "ML3"
+    },
+    {
+      "id": "ML3",
+      "rt": [
+        "ALU(+) -> C -> ei",
+        "k -> A -> ALU(+)",
+        "sp -> B ->ALU(+)"
+      ],
+      "next": "ML3"
+    },
+    {
+      "id": "ML4",
+      "rt": [
+        "ALU(+) -> C -> k"
+      ],
+      "next": "IL_TEST1"
+    },
+    {
+      "group": "INNER (butterfly loop)",
+      "col": 1,
+      "states": [
+        {
+          "id": "IL_TEST1",
+          "rt": [
+            "j -> A -> ALU(-)",
+            "ei -> B -> ALU(-)"
+          ],
+          "next": "IL_TEST2"
+        },
+        {
+          "id": "IL_TEST2",
+          "rt": [
+            ""
+          ],
+          "next": {
+            "ALU,N = 1": "IL1",
+            "ALU,N = 0": "ML_TEST1"
+          }
+        },
+        {
+          "id": "IL1",
+          "rt": [
+            "j -> A -> ALU(+)",
+            "h -> B -> ALU(+)"
+          ],
+          "next": "IL2"
+        },
+        {
+          "id": "IL2",
+          "rt": [
+            "ALU(+) -> C -> ad",
+            "j -> A -> load,r"
+          ],
+          "next": "IL3"
+        },
+        {
+          "id": "IL3",
+          "rt": [
+            "load,r -> FP_C ->u,r",
+            "j -> A -> load,i"
+          ],
+          "next": "IL4"
+        },
+        {
+          "id": "IL4",
+          "rt": [
+            "load,i -> FP_C ->u,i",
+            "ad -> A -> load,r"
+          ],
+          "next": "IL5"
+        },
+        {
+          "id": "IL5",
+          "rt": [
+            "load,r -> FP_C ->b,r",
+            "ad -> A -> load,i"
+          ],
+          "next": "IL6"
+        },
+        {
+          "id": "IL6",
+          "rt": [
+            "load,i -> FP_C ->b,i"
+          ],
+          "next": "CMUL o b t CADD u t b IL7"
+        },
+        {
+          "id": "IL7",
+          "rt": [
+            "j -> A -> store,r",
+            "b,r -> FP_C -> store,r"
+          ],
+          "next": "IL8"
+        },
+        {
+          "id": "IL8",
+          "rt": [
+            "j -> A -> store,i",
+            "b,i -> FP_C -> store,i"
+          ],
+          "next": "CSUB u t b IL9"
+        },
+        {
+          "id": "IL9",
+          "rt": [
+            "ad -> A -> store,r",
+            "b,r -> FP_C -> store,r"
+          ],
+          "next": "IL10"
+        },
+        {
+          "id": "IL10",
+          "rt": [
+            "ad -> A -> store,i",
+            "b,i -> FP_C -> store,i"
+          ],
+          "next": "CMUL o do o IL11"
+        },
+        {
+          "id": "IL11",
+          "rt": [
+            "j -> B -> ALU(+)",
+            "1 -> A -> ALU(+)"
+          ],
+          "next": "IL12"
+        },
+        {
+          "id": "IL12",
+          "rt": [
+            "ALU(+) -> C -> j"
+          ],
+          "next": "IL_TEST1"
+        }
+      ]
+    }
+  ]
+}

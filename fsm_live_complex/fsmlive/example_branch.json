@@ -1,0 +1,9 @@
+{
+  "title": "Syntax example: memory flag, flags, branch",
+  "states": [
+    { "id": "J_CMP", "rt": ["j → B → ALU(-)", "kh → C → ALU(-)"], "flags": ["SUB-Z: X", "-C: S"], "next": "J_BR" },
+    { "id": "J_BR", "rt": [], "next": { "C=1": "BODY", "C=0": "K_INC" } },
+    { "id": "BODY", "rt": ["j → C → MEM(ADR)"], "mem": "DR", "next": "J_CMP" }
+  ],
+  "same_rank": [["BODY", "K_INC"]]
+}

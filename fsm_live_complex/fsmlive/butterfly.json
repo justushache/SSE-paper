@@ -1,0 +1,183 @@
+{
+  "title": "FFT",
+  "include": [
+    "complex_ops.json"
+  ],
+  "states": [
+    {
+      "id": "SETUP1",
+      "rt": [
+        "1 -> C -> sp"
+      ],
+      "next": "SETUP2"
+    },
+    {
+      "id": "SETUP2",
+      "rt": [
+        "2^(len) -> C -> N"
+      ],
+      "next": "OL_TEST1"
+    },
+    {
+      "id": "OL_TEST1",
+      "rt": [
+        "sp -> A ->ALU(-)",
+        "N -> B -> ALU(-)"
+      ],
+      "next": "OL_TEST2"
+    },
+    {
+      "id": "OL_TEST2",
+      "rt": [
+        "sp -> C ->h",
+        "sp -> <<1 -> sp"
+      ],
+      "next": {
+        "ALU,N = 0": "FINISH",
+        "ALU,N = 1": "OL3"
+      }
+    },
+    {
+      "id": "OL3",
+      "rt": [
+        "sp -> C -> do_gen"
+      ],
+      "next": "OL5"
+    },
+    {
+      "id": "OL5",
+      "rt": [
+        "do_gen -> CFP_C -> do",
+        "0 -> C-> k"
+      ],
+      "next": "ML_TEST1"
+    },
+    {
+      "id": "ML_TEST1",
+      "rt": [
+        "k -> A -> ALU(-)",
+        "N -> B -> ALU(-)"
+      ],
+      "next": "ML_TEST2"
+    },
+    {
+      "id": "ML_TEST2",
+      "rt": [
+        "1.0 + 0.0j -> CFP_C -> o",
+        "k -> C -> j",
+        "k -> A -> ALU(+)",
+        "h -> B -> ALU(+)"
+      ],
+      "next": {
+        "ALU,N = 1": "ML1",
+        "ALU,N = 0": "OL_TEST1"
+      }
+    },
+    {
+      "id": "ML1",
+      "rt": [
+        "ALU(+) -> C -> ei",
+        "k -> A -> ALU(+)",
+        "sp -> B ->ALU(+)"
+      ],
+      "next": "ML3"
+    },
+    {
+      "id": "ML3",
+      "rt": [
+        "ALU(+) -> C -> k",
+        "j -> A -> ALU(-)",
+        "ei -> B -> ALU(-)"
+      ],
+      "next": "IL_TEST2"
+    },
+    {
+      "group": "INNER (butterfly loop)",
+      "col": 1,
+      "states": [
+        {
+          "id": "IL_TEST1",
+          "rt": [
+            "j -> A -> ALU(-)",
+            "ei -> B -> ALU(-)"
+          ],
+          "next": "IL_TEST2"
+        },
+        {
+          "id": "IL_TEST2",
+          "rt": [
+            "j -> A -> ALU(+)",
+            "h -> B -> ALU(+)"
+          ],
+          "next": {
+            "ALU,N = 1": "IL2",
+            "ALU,N = 0": "ML_TEST1"
+          }
+        },
+        {
+          "id": "IL2",
+          "rt": [
+            "ALU(+) -> C -> ad",
+            "j -> A -> load"
+          ],
+          "next": "IL3"
+        },
+        {
+          "id": "IL3",
+          "rt": [
+            "load -> CFP_C ->u",
+            "ad -> A -> load",
+            "do -> CFP_A -> CMUL",
+            "o -> CFP_B -> CMUL"
+          ],
+          "next": "IL5"
+        },
+        {
+          "id": "IL5",
+          "rt": [
+            "load -> CFP_A -> CMUL",
+            "o -> CFP_B -> CMUL"
+          ],
+          "next": "IL6.1"
+        },
+        {
+          "id": "IL6.1",
+          "rt": [
+            "CMUL -> CFP_C -> o"
+          ],
+          "next": "IL6.2"
+        },
+        {
+          "id": "IL6.2",
+          "rt": [
+            "CMUL -> CFP_C -> t",
+            "CMUL -> CFP_B -> CALU(+)",
+            "u -> CFP_A -> CALU(+)"
+          ],
+          "next": "IL7"
+        },
+        {
+          "id": "IL7",
+          "rt": [
+            "j -> A -> store",
+            "j -> A -> ALU(+)",
+            "1 -> B -> ALU(+)",
+            "CALU(+) -> CFP_C -> store",
+            "u -> CFP_A -> CALU(-)",
+            "t -> CFP_B -> CALU(-)"
+          ],
+          "next": "IL9"
+        },
+        {
+          "id": "IL9",
+          "rt": [
+            "ALU(+) -> C -> j",
+            "ad -> A -> store",
+            "CALU(-) -> CFP_C -> store"
+          ],
+          "next": "IL_TEST1"
+        }
+      ]
+    }
+  ]
+}

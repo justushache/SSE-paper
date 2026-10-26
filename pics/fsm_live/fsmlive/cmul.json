@@ -1,0 +1,13 @@
+{
+  "title": "CMUL  a = a·b   (d ∈ {a, b}; scratch T1, T2)",
+  "states": [
+    { "id": "CMUL1", "rt": ["a_r → B → MUL", "b_r → C → MUL"], "next": "CMUL2" },
+    { "id": "CMUL2", "rt": ["a_i → B → MUL", "b_i → C → MUL", "MUL → A → T1   (ar·br)"], "next": "CMUL3" },
+    { "id": "CMUL3", "rt": ["a_r → B → MUL", "b_i → C → MUL", "MUL → A → T2   (ai·bi)"], "next": "CMUL4" },
+    { "id": "CMUL4", "rt": ["T1 → B → ALU(-)", "T2 → C → ALU(-)", "MUL → A → T1   (ar·bi)"], "next": "CMUL5" },
+    { "id": "CMUL5", "rt": ["a_i → B → MUL", "b_r → C → MUL", "ALU → A → a_r   (Re)"], "next": "CMUL6" },
+    { "id": "CMUL6", "rt": ["MUL → A → T2   (ai·br)"], "next": "CMUL7" },
+    { "id": "CMUL7", "rt": ["T1 → B → ALU(+)", "T2 → C → ALU(+)"], "next": "CMUL8" },
+    { "id": "CMUL8", "rt": ["ALU → A → a_i   (Im)"], "next": "RET" }
+  ]
+}
