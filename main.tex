@@ -4,6 +4,7 @@
 \documentclass[fontsize=12pt,paper=a4,ngerman]{scrarticle}
 \author{Justus Gottfried Hache} % Bitte Autor anpassen. Er wird auch in die PDF Metadaten übernommen
 \usepackage{sse}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -95,7 +96,7 @@ TODO: reference ist eine Teilung in 3 Teile $6\%$ effizienter, eine Teilung in
 4 gleich schnell im Vergleich zu einer Teilung in 2. Allerdings Bringt die
 Teilung in 2 deutlich vereinfachungen der Speicherung und Adressberechnung auf
 binärkomputern, sodass heutzutage meist eine Teilung in 2, einige praktische
-implementierungen TODO:reference aber auch eine Teilung in 4 für eine bessere
+Implementierungen TODO:reference aber auch eine Teilung in 4 für eine bessere
 Hardwarenutzung verwenden. Die Referenzimplementierung TODO: link verwendet
 eine sequentielle Version dieses Algorithmus. Dabei wird jedes Mal Teilen einer
 neuen „Stufe“ zugeordnet. Die erste Stufe kombiniert dann $N$ Teile, zu $N/2$
@@ -107,14 +108,142 @@ Teils gegangen.
 Was zum Rundungsverhalten/Abweichungen erklären, usw.
 
 \section{Entwurf}
+\subsection{Ablaufdiagramm}
+In Diagramm \ref{fig:flowchart} ist der Programmablauf graphisch dargestellt.
+Für eine performante Implementierung in Hardware gestaltet sich vor allem die 3
+ineinanderliegenden Schleifen, welche in der Finalen implementierung teilweise
+parallel ausgeführt werden müssen. Im Ablaufdiagramm wurden folgende Variablen
+verwendet:
+
+\begin{itemize}
+	\item $len$ = der Logarithmus zur Basis 2 der konfigurierbaren Länge der Datenserie,
+	\item $N$ = die Länge der Datenserie am Eingang,
+	\item $stagepow$ = 2 hoch die aktuelle Stufe. Wird als counter für den äußeren loop verwendet.
+	\item $half$ = Hälfte von $stagepow$, oder der Wert aus der vorherigen Schleifeniteration.
+	\item $k$ = Zähler der mittleren Schleife.
+	\item $j$ = Zähler der inneren Schleife.
+	\item $omega$ = Komplexe Zahl, entspricht $W^k_N$ aus Kapitel Implementierung
+	\item $domega$ = Komplexe Zahl, entspricht $W^1_N$ aus Kapitel Implementierung.
+	\item $t$,$u$ = Komplexe Hilfsvariablen
+\end{itemize}
+\begin{figure}[h]
+	\label{fig:flowchart}%TODO: this ref is not working right now
+	\includegraphics{pics/FFT_flowchart.png}
+	\centering
+\end{figure}
 \subsection{Unoptimierter Datenflussgraph}
-% Es folgt ein Beispiel, wie ihr einen drawio Export einfügen könnt
-\iffalse % begin block comment
-	\begin{figure}[ht]
+In Diagramm \ref{fig:unoptimized_datapath} is eine erste Datenpfadarchitektur
+dargestellt, welche als Startpunkt des Entwurfes dient. Prinzipiell kann man
+mit dieser Architektur alle Operationen ausführen, die für die Schnelle
+Fouriertransformation nötig wären. Eine solche Ausführung wäre allerdings nicht
+sonderlich schneller, als eine Implementierung auf einem üblichen Prozessor.
+
+\begin{figure}[ht]
+	\centering
+	\label{fig:unoptimized_datapath}%TODO: this ref is not working right now
+	\includegraphics[width=0.8\textwidth]{pics/Datapath architecture.drawio.png}
+\end{figure}
+\subsection{Unoptimierte FSM}
+Um die in Diagramm \ref{fig:unoptimized_datapath} dargestellte
+Datenpfadarchitektur zum berechnen einer Fourier zu verwenden, müssen die
+verschiedenen möglichen Datentransfers mit einem Endlichen Zustandsautomat
+(engl. Finite State Machine, FSM) gesteuert werden. Dieser wird im Folgenden
+mithilfe von Registertransferfolgen ersetllt. Dieser unoptimierte
+Zustandsautomat ist jedoch sehr groß, sodass wir die Funktionen komplexe
+Multiplikation, Addition sowie Subtraktion abgetrennt betrachten.
+
+In der Registertransferfolge \ref{fig:complex_operations_RFD} sind jeweils die
+Zustände, welche für Komplexe Addition, Subtraktion und Multiplikation
+notwendig sind dargestellt. Die Parameter a,b und c stehen dafür für zwei
+Eingangs- und ein Ausgangsregisterpaar mit je einem FP64 Register für komplexen
+und reellen Teil. Schon hier wird deutlich, wie viele Takte eine einzelne
+komplexe Multiplikation einnehmen kann.
+
+\begin{figure}
+	\centering
+	\label{fig:complex_operations_RFD}
+	\includegraphics[width=0.8\textwidth]{pics/fsm_live/Complex_substates_FP_A_FP_B_operands_FP_C_write-back_scratch_rd_.png}
+\end{figure}
+
+In der weiteren Registertransferfolge \ref{fig:unoptimized_FSM_RFD} ist der
+Zustandsautomat und die benötigten Transfere für die unoptimierte
+Datenpfadarchitektur dargestellt. Die im vorherigen Kapitel definierten
+Funktionen werden dabei aus Übersichtsgründen nur aufgerufen, in einer
+implementierten FSM müssten sie aber direkt in die eigentliche FSM eingefügt
+werden.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{pics/fsm_live/FFT.png}
+	\label{fig:unoptimized_FSM_RFD}
+\end{figure}
+
+\subsection{Optimierungen}
+Das primäre Optimierungskriterium in dieser Arbeit ist Geschwindigkeit, der
+ASIC muss dafür also eine iteration des inneren loops so schnell wie möglich
+ausführen. Durch die unoptimierte FSM ist deutlich geworden, wie viel Takte
+eine einzelne Iteration der inneren Schleife dauern würde. Aus Gründen der
+Übersichtlichkeit und Länge der Arbeit wird hier darauf verzichtet, eine
+Registertransferanalyse vom ersten Datenpfad darzustellen anstelle dessen
+führen wir zuerst Optimierungen ein. Um die Anzahl der Zustände zu verringern
+und die Verarbeitungsgeschwindigkeit zu erhöhen wechseln wir auf einen
+Datenpfad, der direkt mit komplexen Zahlen arbeiten kann. Dafür halten alle
+Register, welche eine komplexe Zahl speichern 128 Bit, je 64 für Imaginär- und
+Realteil. Daraus folgen drei Konsequenzen: Zum einen muss das Speicherinterface
+128 Bit Daten lesen und schreiben können, wobei wir einen dual-port Speicher,
+welcher gleichzeitig schreiben und lesen kann verwenden. Es müssen aber auch
+Komplexe Addition/Subtraktion und Multiplikation mit komplexen Zahlen arbeiten
+können. Um dies zu erreichen erstellen wir 2 neue Datenpfadelemente,
+dargestellt in Diagramm \ref{fig:COMP_ALU_DP} und \ref{fig:COMP_MUL_DP}. Die
+komplexe ALU kann wie ein normales Datenpfadelement verwendet werden und
+benötigt nur einen Takt, die komplexe Multiplikation hingegen benötigt 2 Takte,
+bis ein valides Ergebnis am Ausgang erscheint. Durch die Register am Ende der
+internen Gleitkomma-Multiplizierer, kann man aber jeden Takt eine neue
+Berechnung starten. Der erstellte komplexe Gleitkomma Multiplizierer hat einen
+großen Flächenverbrauch, da er 4 Gleitkomma Multiplizierer enthält, welche
+schon im unoptimierten Datenpfad die Einheiten mit dem größten Flächenverbrauch
+waren. Das primäre Optimierungskriterium dieser Arbeit ist jedoch
+Geschwindigkeit und wie später noch gezeigt wird, erreicht der ASIC final eine
+hundertprozentige Auslastung des komplexen Multiplizierers in der mittleren und
+inneren Schleife.
+
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\textwidth,trim=0.8cm 0.8cm 0.8cm 0.8cm,clip]{pics/Datenflussdiagramm-datenfluss1.drawio.pdf}
-	\end{figure}
-\fi % end block comment
+		\includegraphics[width=\linewidth]{pics/Complex ALU.drawio.png}
+		\caption{Komplexe ALU}
+		\label{fig:COMP_ALU_DP}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.6\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{pics/Complex MUL.drawio.png}
+		\caption{Komplexer Multiplizierer}
+		\label{fig:COMP_MUL_DP}
+	\end{subfigure}
+	\caption{Komplexe Datenpfadelemente}
+	\label{fig:COMP_DP}
+\end{figure}
+
+\subsection{Unoptimierter komplexer Datenflussgraph}
+In Diagramm \ref{fig:complex_unoptimized_datapath} ist der modifizierte
+Datenpfad dargestellt, welcher jetzt die komplexen Operationen nutzt.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{pics/Complex Datapath architecture.png}
+	\label{fig:complex_unoptimized_datapath}
+\end{figure}
+\subsection{Unoptimierte komplexe FSM}
+Mithilfe des komplexen Datenpfades und einiger kleinerer optimierungen in den
+Schleifen, erhält man das Registerfolgediagram
+\ref{fig:unoptimized_complex_FSM_RFD}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{pics/fsm_live/FFT_RFD_complex.png}
+	\label{fig:unoptimized_complex_FSM_RFD}
+\end{figure}
 
 \subsection{Optimierter Datenflussgraph}
 Auch erklären, was das Optimierungskriterium ist.

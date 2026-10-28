@@ -110,6 +110,7 @@
       ]
     },
     "CSUB": {
+      "below": "CADD",
       "params": [
         "a",
         "b",

@@ -10,6 +10,7 @@ JSON
   "substates": { "CMUL": { "params": ["a","b","d"], "states": [...] } }
   "states":    [ { "id", "rt", "flags", "mem", "next" } ]
 In substates, write parameters as {a}, {b}, {d}; finish with "next": "RET".
+  "below": "CADD" in a substate draws it under CADD (definitions view)
 Call a substate from "next" (also inside branches), chains allowed:
   "next": "CMUL o b t BF2"                 NAME <one register per param> RETURN_STATE
   "next": "CMUL o b t CADD u t b IL7"      CMUL, then CADD, then IL7
@@ -137,19 +138,22 @@ function resolve(t,scope,callerId,e,out,depth){
 
 // empty rows of the Fig. 5 box shrink to a thin strip instead of a full text line
 const cell=v=>arr(v).filter(x=>x!=="").length?`<TD ALIGN="LEFT" BALIGN="LEFT">${lines(v)}</TD>`:'<TD><FONT POINT-SIZE="2"> </FONT></TD>';
-function stateNode(s,nextTxt){
+// branch=true: one sub-row per condition with PORT="c<i>", so each jump starts at its condition text
+function stateNode(s,nextTxt,branch){
   const mem=s.mem?`<TD BGCOLOR="#4FA3E0" ALIGN="LEFT"><FONT COLOR="white"><B>M</B></FONT> ${esc(s.mem)}</TD>`:cell("");
   const rt=arr(s.rt).filter(x=>x!=="").length?lines(s.rt):'<FONT COLOR="#999999">(no transfer)</FONT>';
+  const next=branch?`<TD CELLPADDING="0"><TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">`+
+    nextTxt.map((t,i)=>`<TR><TD PORT="c${i}" ALIGN="LEFT">${esc(t)}</TD></TR>`).join("")+`</TABLE></TD>`:cell(nextTxt);
   return `"${s.id}"[tooltip="${esc(s.id)}" label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="2" COLOR="${C}">`+
     `<TR><TD ROWSPAN="4" ALIGN="LEFT" BALIGN="LEFT" WIDTH="150">${rt}</TD>${mem}</TR>`+
     `<TR>${cell(s.flags)}</TR>`+
-    `<TR>${cell(nextTxt)}</TR>`+
+    `<TR>${next}</TR>`+
     `<TR><TD BGCOLOR="#7FFFFF" ALIGN="LEFT" WIDTH="90"><FONT POINT-SIZE="11"><B>${esc(short(s.id))}</B></FONT></TD></TR></TABLE>>];`;
 }
 
 function toDot(g,doExpand,stubs){
   C=g.color||"#2F5F8F";
-  const head=[`digraph fsm{rankdir=TB;nodesep=0.35;ranksep=0.3;splines=ortho;newrank=true;`,
+  const head=[`digraph fsm{rankdir=TB;nodesep=0.35;ranksep=0.3;splines=spline;newrank=true;`,
    `node[shape=plain fontname="Arial" fontsize=10];edge[color="${C}" fontcolor="${C}" fontname="Arial" fontsize=9];`];
   if(!g.states) return defsOnly(head);
   const {flat,groups}=flatten(g.states);
@@ -158,24 +162,26 @@ function toDot(g,doExpand,stubs){
   const nodes=new Map(), E=[];           // nodes: key -> {dot, path, top}
   const order=[];                        // vertical order = file order (+ call boxes after caller)
   const add=(id,dot,e,seq=true)=>{nodes.set(id,{dot,path:e.path,top:e.top}); if(seq) order.push(id);};
-  let pending=0;
+  let pending=0; const branches=new Map();   // branch state id -> {s, txt}, rows get sorted below
   for(const e of entries){
-    const s=e.s, txt=[];
-    for(const[c,t] of nextList(s.next)){
+    const s=e.s, txt=[], nl=nextList(s.next), branch=nl.length>1||nl.some(([c])=>c);
+    nl.forEach(([c,t],ni)=>{
       txt.push((c?c+": ":"")+(doExpand?short(t):t));
+      const port=branch?`c${ni}`:null;    // E entry: [from, to, condition, port on "from"]
       const ch=doExpand?null:parseChain(t);
       if(ch){
-        let prev=s.id, pc=c;
+        let prev=s.id, pc=c, pp=port;
         ch.calls.forEach((call,k)=>{
           const cid=`call:${s.id}:${c}:${k}`, def=SUBS[call.name];
           const bind=(def.params||[]).map((p,i)=>`${p}=${call.args[i]}`).join(", ");
           add(cid,`"${cid}"[shape=box style="rounded,bold" peripheries=2 color="${C}" fontname="Arial" fontsize=10 label="${esc(call.name)}\\n${esc(bind)}\\n(${def.states.length} states)"];`,e);
-          groupOf.set(cid,e.top); E.push([prev,cid,pc]); prev=cid; pc=""; pending++;
+          groupOf.set(cid,e.top); E.push([prev,cid,pc,pp]); prev=cid; pc=""; pp=null; pending++;
         });
-        E.push([prev,ch.ret,"ret"]);
-      } else E.push([s.id,t,c]);
-    }
-    add(s.id,stateNode(s,txt),e,false);
+        E.push([prev,ch.ret,"ret",null]);
+      } else E.push([s.id,t,c,port]);
+    });
+    add(s.id,stateNode(s,txt,branch),e,false);
+    if(branch) branches.set(s.id,{s,txt});
     order.splice(order.length-pending,0,s.id); pending=0;
   }
   const anchors=[];
@@ -187,6 +193,24 @@ function toDot(g,doExpand,stubs){
   }
   // columns
   let maxc=-1; const colOf=groups.map(gr=>{const c=gr.col!==undefined?gr.col:maxc+1; maxc=Math.max(maxc,c); return c;});
+  const pos=new Map();
+  groups.forEach((_,gi)=>order.filter(id=>nodes.get(id).top===gi).forEach((id,i)=>pos.set(id,[gi,i])));
+  const colOfNode=id=>colOf[groupOf.get(id)];
+  // how a jump is drawn (see edges below): as connector tags, or as a line inside the column
+  const asTag=(a,b)=>{const pa=pos.get(a), pb=pos.get(b);
+    return colOfNode(a)!==colOfNode(b)||(groupOf.get(a)!==groupOf.get(b)&&stubs)||(pa&&pb&&pa[0]===pb[0]&&Math.abs(pb[1]-pa[1])>2);};
+  // condition rows of a branch state, ordered by where their arrow goes: up first, then sideways
+  // (tags, terminal states), down last. The arrows then fan out from the box without crossing.
+  const heading=(a,b)=>{if(asTag(a,b)) return 0; const pa=pos.get(a), pb=pos.get(b);
+    return pa&&pb&&pa[0]===pb[0]?(pb[1]>pa[1]?2:-1):1;};
+  for(const[id,{s,txt}] of branches){
+    const mine=E.filter(x=>x[0]===id&&x[3]);
+    const key=new Map(mine.map(x=>[x[3],heading(id,x[1])]));
+    const perm=txt.map((_,i)=>i).sort((i,j)=>(key.get(`c${i}`)??1)-(key.get(`c${j}`)??1)||i-j);
+    const to=new Map(perm.map((old,i)=>[`c${old}`,`c${i}`]));
+    for(const x of mine) x[3]=to.get(x[3]);
+    nodes.get(id).dot=stateNode(s,perm.map(i=>txt[i]),true);
+  }
   const body=[];
   // clusters (nested by path) per top group
   const tree={kids:new Map(),nodes:[]};
@@ -200,17 +224,34 @@ function toDot(g,doExpand,stubs){
   (function emit(t){ body.push(...t.nodes);
     for(const k of t.kids.values()){ body.push(`subgraph cluster_${ci++}{label="${esc(k.label)}";labeljust=l;fontname="Arial";fontsize=12;fontcolor="${C}";color="${C}";style=dashed;`);
       emit(k); body.push("}"); } })(tree);
-  // edges
-  let si=0;
-  for(const[a,b,c] of E){
-    const cross=groupOf.get(a)!==groupOf.get(b);
-    // ortho routing misplaces xlabels; a tail label stays at the branch state it belongs to
-    const lab=c&&c!=="ret"?`taillabel="${esc(c)}" labeldistance=3 labelangle=-70 labelfontsize=9`:"";
-    if(cross&&stubs){
-      const sid=`stub${si++}`, n=nodes.get(a);
-      body.push(`"${sid}"[shape=plaintext fontcolor="${C}" fontname="Arial" fontsize=10 label="→ ${esc(short(b))}"];`);
-      body.push(`"${a}"->"${sid}"[${lab}];`);
-    } else body.push(`"${a}"->"${b}"[${[lab,"constraint=false"].filter(Boolean).join(",")}];`);
+  // edges: the next state in the column goes straight down, a short jump (up to 2 states) loops along
+  // the right side. A longer jump, a jump to another column (or to another group with "stubs")
+  // becomes connector tags right of the boxes: "→ TARGET" at the source, one "from A, B" per target.
+  // Branch edges start at their condition row, so they need no label.
+  const tag=(id,txt)=>body.push(`"${id}"[shape=box style="rounded,dashed" color="${C}" fontcolor="${C}" fontname="Arial" fontsize=10 margin="0.06,0.02" height=0.25 label="${esc(txt)}"];`);
+  let si=0; const incoming=new Map(), outTags=new Map();
+  for(const[a,b,c,port] of E){
+    const lab=c&&c!=="ret"&&!port?`taillabel="${esc(c)}" labeldistance=3 labelangle=-70 labelfontsize=9`:"";
+    const from=side=>port&&side!=="w"?`"${a}":${port}:${side}`:`"${a}":${side}`;
+    const pa=pos.get(a), pb=pos.get(b), same=pa&&pb&&pa[0]===pb[0];
+    if(asTag(a,b)){
+      const out=`stub${si++}`;
+      tag(out,"→ "+short(b));
+      body.push(`{rank=same;"${a}";"${out}"}`,`${from("e")}->"${out}":w[${lab}];`);
+      if(!outTags.has(a)) outTags.set(a,[]);
+      outTags.get(a).push(out);
+      if(!incoming.has(b)) incoming.set(b,[]);
+      if(!incoming.get(b).includes(short(a))) incoming.get(b).push(short(a));
+      continue;
+    }
+    const [t,h]=same&&pb[1]===pa[1]+1&&!port?["s","n"]:["e","e"];
+    body.push(`${from(t)}->"${b}":${h}[${[lab,"constraint=false"].filter(Boolean).join(",")}];`);
+  }
+  for(const[b,srcs] of incoming){
+    const inn=`stub${si++}`; tag(inn,"from "+srcs.join(", "));
+    body.push(`{rank=same;"${b}";"${inn}"}`,`"${b}":e->"${inn}":w[dir=back];`);
+    // a state with its own "→" tags keeps the "from" tag next to the box, so no arrow crosses a tag
+    for(const out of outTags.get(b)||[]) body.push(`"${inn}"->"${out}"[style=invis];`);
   }
   for(const[a,b] of anchors) body.push(`"${a}"->"${b}"[style=invis];`);
   // sequence chain inside each top group
@@ -247,6 +288,12 @@ function defsOnly(head){
     }
     o.push(`"${pre}RET"[shape=box style=rounded color="${C}" fontname="Arial" fontsize=10 label="RET"];}`);
     count+=d.states.length;
+  }
+  // "below": "CADD" in a substate stacks its box under that substate instead of beside it
+  for(const[name,d] of Object.entries(SUBS)){
+    if(!d._local||!d.below) continue;
+    if(!SUBS[d.below]||!SUBS[d.below]._local){WARN.push(`${name}: "below" names unknown substate ${d.below}`);continue;}
+    o.push(`"${d.below}›RET"->"${name}›${d.states[0].id}"[style=invis weight=20 minlen=2];`);
   }
   return [o.join("\n")+"}",count];
 }
@@ -326,7 +373,7 @@ async function tick(){
 }
 function err(m){document.getElementById("err").textContent=m;}
 function dl(){const s=document.querySelector("#out svg");if(!s)return;
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s.outerHTML],{type:"image/svg+xml"}));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(s)],{type:"image/svg+xml"}));
   a.download=(document.getElementById("title").textContent||"fsm").replace(/[^\w-]+/g,"_")+".svg";a.click();}
 for(const id of ["expand","stubs"]) document.getElementById(id).onchange=()=>lastData&&render();
 setInterval(tick,500); tick();

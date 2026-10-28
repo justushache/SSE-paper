@@ -123,7 +123,7 @@
         "k -> A -> ALU(+)",
         "sp -> B ->ALU(+)"
       ],
-      "next": "ML3"
+      "next": "ML4"
     },
     {
       "id": "ML4",
