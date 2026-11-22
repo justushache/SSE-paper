@@ -1,0 +1,45 @@
+{
+  "title": "FFT",
+  "include": ["complex_ops.json"],
+  "states": [
+    { "group": "SETUP", "col": 0, "states": [
+      { "id": "SETUP1", "rt": ["1 -> C -> sp"], "next": "SETUP2" },
+      { "id": "SETUP2", "rt": ["2^(len) -> C -> N"], "next": "OL1" }
+    ]},
+    { "group": "OUTER  (stage loop)", "col": 0, "states": [
+      { "id": "OL1", "rt": ["sp -> C -> h"], "next": "OL2" },
+      { "id": "OL2", "rt": ["sp -> A -> ALU(+)", "sp -> B -> ALU(+)"], "next": "OL3" },
+      { "id": "OL3", "rt": ["ALU(+) -> C -> sp"], "next": "OL_TEST1" },
+      { "id": "OL_TEST1", "rt": ["N -> A -> ALU(-)", "sp -> B -> ALU(-)"], "next": "OL_TEST2" },
+      { "id": "OL_TEST2", "rt": [], "next": { "ALU,N = 0": "OL4", "ALU,N = 1": "DONE" } },
+      { "id": "OL4", "rt": ["sp -> A -> do_gen(real)"], "next": "OL5" },
+      { "id": "OL5", "rt": ["do_gen(real) -> FP_C -> do,r", "sp -> A -> do_gen(imag)"], "next": "OL6" },
+      { "id": "OL6", "rt": ["do_gen(imag) -> FP_C -> do,i", "0 -> C -> k"], "next": "ML_TEST1" }
+    ]},
+    { "group": "MIDDLE  (group loop)", "states": [
+      { "id": "ML_TEST1", "rt": ["k -> A -> ALU(-)", "N -> B -> ALU(-)"], "next": "ML_TEST2" },
+      { "id": "ML_TEST2", "rt": [], "next": { "ALU,N = 1": "ML1", "ALU,N = 0": "OL1" } },
+      { "id": "ML1", "rt": ["1.0 -> FP_C -> o,r", "k -> C -> j"], "next": "ML2" },
+      { "id": "ML2", "rt": ["0.0 -> FP_C -> o,i", "k -> A -> ALU(+)", "h -> B -> ALU(+)"], "next": "ML3" },
+      { "id": "ML3", "rt": ["ALU(+) -> C -> ei"], "next": "IL_TEST1" },
+      { "id": "K_INC1", "rt": ["k -> A -> ALU(+)", "sp -> B -> ALU(+)"], "next": "K_INC2" },
+      { "id": "K_INC2", "rt": ["ALU(+) -> C -> k"], "next": "ML_TEST1" }
+    ]},
+    { "group": "INNER  (butterfly loop)", "states": [
+      { "id": "IL_TEST1", "rt": ["j -> A -> ALU(-)", "ei -> B -> ALU(-)"], "next": "IL_TEST2" },
+      { "id": "IL_TEST2", "rt": [], "next": { "ALU,N = 1": "IL1", "ALU,N = 0": "K_INC1" } },
+      { "id": "IL1", "rt": ["j -> A -> ALU(+)", "h -> B -> ALU(+)"], "next": "IL2" },
+      { "id": "IL2", "rt": ["ALU(+) -> C -> ad", "j -> A -> load,r"], "mem": "DR", "next": "IL3" },
+      { "id": "IL3", "rt": ["load,r -> FP_C -> u,r", "j -> A -> load,i"], "mem": "DR", "next": "IL4" },
+      { "id": "IL4", "rt": ["load,i -> FP_C -> u,i", "ad -> A -> load,r"], "mem": "DR", "next": "IL5" },
+      { "id": "IL5", "rt": ["load,r -> FP_C -> b,r", "ad -> A -> load,i"], "mem": "DR", "next": "IL6" },
+      { "id": "IL6", "rt": ["load,i -> FP_C -> b,i"], "next": "CMUL o b t CADD u t b CSUB u t u IL7" },
+      { "id": "IL7", "rt": ["j -> A -> store,r", "b,r -> FP_A -> store,r"], "mem": "DW", "next": "IL8" },
+      { "id": "IL8", "rt": ["j -> A -> store,i", "b,i -> FP_A -> store,i"], "mem": "DW", "next": "IL9" },
+      { "id": "IL9", "rt": ["ad -> A -> store,r", "u,r -> FP_A -> store,r"], "mem": "DW", "next": "IL10" },
+      { "id": "IL10", "rt": ["ad -> A -> store,i", "u,i -> FP_A -> store,i"], "mem": "DW", "next": "CMUL o do o J_INC1" },
+      { "id": "J_INC1", "rt": ["j -> A -> ALU(+)", "1 -> B -> ALU(+)"], "next": "J_INC2" },
+      { "id": "J_INC2", "rt": ["ALU(+) -> C -> j"], "next": "IL_TEST1" }
+    ]}
+  ]
+}

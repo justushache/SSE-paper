@@ -228,16 +228,19 @@ inneren Schleife.
 
 \subsection{Unoptimierter komplexer Datenflussgraph}
 In Diagramm \ref{fig:complex_unoptimized_datapath} ist der modifizierte
-Datenpfad dargestellt, welcher jetzt die komplexen Operationen nutzt.
+Datenpfad dargestellt, welcher jetzt die komplexen Operationen nutzt. Aus dem
+Diagramm ist ersichtlich, dass nun weniger Register und Operationen notwendig
+sind, allerdings jedes Register und die Busse doppelt so groß sind.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics/Complex Datapath architecture.png}
 	\label{fig:complex_unoptimized_datapath}
 \end{figure}
 \subsection{Unoptimierte komplexe FSM}
-Mithilfe des komplexen Datenpfades und einiger kleinerer optimierungen in den
-Schleifen, erhält man das Registerfolgediagram
-\ref{fig:unoptimized_complex_FSM_RFD}
+Mithilfe des komplexen Datenpfades und einiger kleinerer Optimierungen in den
+Schleifen erhält man das Registerfolgediagramm.
+\ref{fig:unoptimized_complex_FSM_RFD} Dieses Diagramm zeigt nun, wie viele
+Stati sich einsparen lassen, wenn man diese ersten Optimierungen erstellt.
 
 \begin{figure}
 	\centering
@@ -245,14 +248,53 @@ Schleifen, erhält man das Registerfolgediagram
 	\label{fig:unoptimized_complex_FSM_RFD}
 \end{figure}
 
-\subsection{Optimierter Datenflussgraph}
-Auch erklären, was das Optimierungskriterium ist.
+\subsection{Optimierter Datenflussgraph - Pipelining}
+Mit dem Optimierungsziel, den Chip möglichst schnell zu machen, ohne unnötige
+Fläche zu verbrauchen, muss jedes Datenpfadelement möglichst gut ausgenutzt
+sein. Das gilt vor allem für den Gleitkomma Teil, da diese deutlich mehr Fläche
+pro element verbrauchen, als normale Ganzzahlen. In diesem Sinne beginnt die
+Optimerung damit, den Gleitkomma Datenpfad so zu optimieren, dass jedes Element
+voll genutzt wird. Dafür muss die Berechnung gepipelined werden. Für jeden
+inneren Durchlauf des Loops müssen zwei Komplexe Multiplikaitonen ausgeführt
+werden, die Multiplikation um das neue omega auszurechnen und die
+Multiplikation um omega mit einem Element zu multiplizieren. Weiterhin
+verwendet diese Arbeit einen Dual Port Speicher, mit dem in einem Takt eine
+Adresse geschrieben und gelesen werden kann. Ein Speicher welcher mehrere
+Zahlen pro takt speichern und lesen kann wäre deutlich aufwendiger. Daraus
+ergibt sich ein maximaler Durchsatz von einer inneren Schleifeniteration alle 2
+Takte. Dafür müssen also alle zwei Takte zwei komplexe Additionen, zwei
+komplexe Multiplikationen, zwei Zahlen gelesen und zwei Zahlen geschrieben
+werden. Die entsprechende Pipeline Architektur wird mit der ASAP Strategie, mit
+der Begrenzung auf die vorgegebenen Datenpfadelemente, umgesetzt. Im folgendem
+Diagramm ist die umgesetzte pipeline Architektur dargestellt. Diese Pipeline
+ist so ausgelegt, dass die erste Stufe immer ausgeführt wird, wenn die mittlere
+oder innere Schleife ausgeführt wird. Das bedeuted auch, das immer wenn eine
+neue Schleifeniteration der mittleren Schleife gestartet wird, auch
+gleichzeitig schon die innere Schleife ausgeführt wird. Dafür ist ein zweiter
+Ganzzahl Addierer nötig, es ermöglicht aber, das auch in der ersten Iteration
+der äußeren Schleife, wo die mittlere und innere Schleife immer nur eine
+Butterfly berechnung starten, noch eine Butterfly operation alle zwei Takte
+gestartet werden kann.Beim optimieren der Pipeline war eines der Probleme, dass
+die komplexe Multiplikation, welche das nächste omega berechnet, zwei Takte
+benötigt, im nächsten loop, aber schon das Ergebnis benötigt wird. Dies wird
+gelöst, indem die komplexe Multiplikation vor der Mutliplikation, welche omega
+und das andere Element multipliziert, gestartet wird. Das Ergebnis wird aber
+erst geschwieben, nachdem die zweite Multiplikation schon gestartet ist.Das
+Ergebnis ist aber trozdem 2 Takte später fertig, sodass dann gleich mit diesem
+Ergebnis in der nächste Pipelineiteration das darauffolgende omega berechnet
+werden kann.Die Optimierung der Schleifeniteration, sodass der benötigte
+Durchsatz in der Pipeline erreicht werden kann, wird in einem späteren Kapitel
+behandelt. % TODO create diagramm which shows the pipline datapath whcih is put into cycles. also put in the list which shows which units are used each cycle
 
-\subsection{Datenpfadarchitektur}
-In \autoref{table:datentransfer} sind die Datentransferoperationen für die
-Register, Recheneinheiten und den Speicher aufgelistet. Sie wurden aus dem
-Datenflussgraphen abgeleitet. Zeigt mehr als eine Quelle auf ein
-Datenpfadelement, wird ein Multiplexer benötigt.
+\subsection{Optimierte Datenpfadarchitektur - 2 ALUs}
+Um den benötigten Durchsatz zu erreichen ist, wie im vorherigen Kapitel
+beschrieben, nötig, die mittlere und innere Schleife parallel und innerhalb von
+zwei Takten auszuführen. Da in Mittleren und innerem loop mindestens zwei
+Additionen, nur für die Schleifensteuerung nötig sind, wird eine zweite
+Ganzzahl ALU benötigt. Das Diagramm zeigt die dementsprechende
+Datenpfadarchitektur, wobei schon nur die benötigten Datenpfadelemente mit den
+jeweiligen Eingängen verbunden sind.Im Diagramm ist die optimierte
+Registertransferfolge dargestellt. % TODO diagramm Datenpfadarchitektur 2 ALUs% TODO registertransferfolgendiagramm
 
 \begin{table}[ht]
 	\centering
@@ -360,37 +402,43 @@ dargestellt.
 
 \section{Simulation}
 In den folgenden Unterkapiteln wurde die Gesamtschaltung mithilfe der Verilog
-Testbench simuliert. Dafür müssen die beiden Simulationsparameter
-\textit{resolution} und \textit{iteration count} im Speicher liegen. Diese
-werden in eine Textdatei geschrieben, welche anschließend von der Testbench
-eingelesen werden. Es wurden folgende Simulationsparameter verwendet:
+Testbench simuliert. Dafür muss die Wertfolge mit den Eingangswerten im
+Speicher legen. Dafür werden 5 verschiedene Szenarios angelegt:
+\begin{enumerate}
+	\item ein konstantes eingangssignal
+	\item ein dirac Impuls
+	\item ein Signal an der nyquist Frequenz
+	\item ein Signal aus den drei oberen aufaddiert
+	\item ein längeres Signal mit der Summe aus den drei signalen
+\end{enumerate}
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{|l|l|l|l|}
-		\hline
-		Parameter                & Dezimal & Hexadezimal & Adresse im Speicher \\ \hline\hline
-		\textit{resolution}      & 25      & 0x00000019  & 0x00000000          \\ \hline
-		\textit{iteration count} & 50      & 0x00000032  & 0x00000001          \\ \hline
-	\end{tabular}
-\end{table}
+Mithilfe eines Python-Programms wird der Speicherinhalt erzeugt, welcher später
+in der Simulation eingelesen wird. Mit dem Verilog testbench Programm wird die
+Konfiguration für die länge der einzulesenden Daten gesetzt und das
+Speicherabbild in den Device Speicher geladen. Gleichzeitig ließt das Programm
+auch den Ergebniss Speicherinahlt ein und vergleicht die ausgabe mit der vorher
+berechneten ausgabe, nachdem die FFT durchgelaufen ist.
 
 \subsection{Verifikation}
-Wie habt ihr Sichergestellt, dass euer Algorithmus tut, was er tut?
+Das beschriebene Skript gibt aus, ob jeder der Tests erfolgreich durchgelaufen
+ist. Als Erfolg ist definiert, wenn das finale Speicherabbild mit dem vorher
+berechnetem Abbild übereinstimmt.
 
 \subsection{Schaltungssynthese}
 
 \subsection{Layoutsynthese}
 
 \section{Zusammenfassung}
-Die Simulation des Schaltkreises hat gezeigt, dass er wie erwartet
-funktioniert. Ihr solltet noch ein paar Worte sagen zu:
-\begin{itemize}
-	\item Abweichungen zur Referenzimplementierung
-	\item Trade-off Geschwindigkeit - Area
-	\item Verbesserungsmöglichkeiten
-\end{itemize}
-Eine halbe Seite genügt.
+Die Simulation der finalen Layoutsynthese hat gezeigt, dass der Schaltkreis so
+funktioniert, wie erwartet. Final ist eine Taktrate von möglich gewesen. Das
+ist vergleichbar mit der Single Core leistung aktueller Prozessoren . Wenn man
+bedenkt, dass der 350nm Prozess vor etwa 30 Jahren aktuell war verdeutlicht
+dies, wie viel Leistung mithilfe von Optimierten ASICs oder Coprozessoren
+optimiert werden kann. Ein solcher ASIC mit einer Größe von XXXXX ist im
+vergleich zu damaligen Prozessoren z.B: Pentium MMX with 140mm2 ist der
+Schaltkreis vergleichsweise ... Diese Größe wurde erreicht, während der
+Durchsatz möglichst optimiert wurde. Eine Verdopplung des Durchsatzes unter
+Verdopplung des Flächenverbrauches ist noch möglich, indem man % TDOO Taktrate% TODO: reference for single core performance% TODO: final size of the ASIC% TODO reference to prev Processors
 
 \clearpage
 \begin{appendices}

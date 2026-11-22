@@ -1,0 +1,8 @@
+{
+  "title": "CADD / CSUB  a = a ± b   (d ∈ {a, b})",
+  "states": [
+    { "id": "CADD1", "rt": ["a_r → B → ALU(±)", "b_r → C → ALU(±)"], "next": "CADD2" },
+    { "id": "CADD2", "rt": ["a_i → B → ALU(±)", "b_i → C → ALU(±)", "ALU → A → a_r   (Re)"], "next": "CADD3" },
+    { "id": "CADD3", "rt": ["ALU → A → a_i   (Im)"], "next": "RET" }
+  ]
+}

@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.10.14)  28 OCT 2026 17:07
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.10.14)  12 NOV 2026 20:20
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/justu/Documents/nui/TUD/SSE/main
@@ -1291,7 +1291,7 @@ Package luatex.def Info: pics/Complex MUL.drawio.png  used on input line 221.
 (luatex.def)             Requested size: 256.07744pt x 235.40672pt.
 
 
-Package caption Warning: \label without proper reference on input line 235.
+Package caption Warning: \label without proper reference on input line 237.
 See the caption package documentation for explanation.
 
 
@@ -1302,52 +1302,52 @@ LaTeX Warning: Reference `fig:complex_unoptimized_datapath' on page 8 undefined
 File: pics/Complex Datapath architecture.png Graphic file (type png)
 <use pics/Complex Datapath architecture.png>
 Package luatex.def Info: pics/Complex Datapath architecture.png  used on input 
-line 234.
+line 236.
 (luatex.def)             Requested size: 341.43442pt x 213.66003pt.
 
-Package caption Warning: \label without proper reference on input line 245.
+Package caption Warning: \label without proper reference on input line 248.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig:unoptimized_complex_FSM_RFD' on page 8 undefined 
-on input line 240.
+on input line 242.
 
 <pics/fsm_live/FFT_RFD_complex.png, id=138, 2173.11874pt x 2248.4pt>
 File: pics/fsm_live/FFT_RFD_complex.png Graphic file (type png)
 <use pics/fsm_live/FFT_RFD_complex.png>
 Package luatex.def Info: pics/fsm_live/FFT_RFD_complex.png  used on input line 
-244.
+247.
 (luatex.def)             Requested size: 341.43442pt x 353.23288pt.
-
-Underfull \hbox (badness 1776) in paragraph at lines 285--285
+[8<./pics/Datapath architecture.drawio.png>] [9<./pics/fsm_live/Complex_substate
+s_FP_A_FP_B_operands_FP_C_write-back_scratch_rd_.png>] [10<./pics/fsm_live/FFT.p
+ng>] [11<./pics/Complex ALU.drawio.png><./pics/Complex MUL.drawio.png><./pics/Co
+mplex Datapath architecture.png>]
+Underfull \hbox (badness 1776) in paragraph at lines 327--327
 [][][]|\TU/lmr/m/n/12 Da-ten-trans-fer-ope-ra-tio-nen der Da-ten-pfad-ar-chi-tek
 -tur. Bei Kon-stan-ten
  []
 
-[8<./pics/Datapath architecture.drawio.png>] [9<./pics/fsm_live/Complex_substate
-s_FP_A_FP_B_operands_FP_C_write-back_scratch_rd_.png>] [10<./pics/fsm_live/FFT.p
-ng>]
-<pics/Registertransferfolge-optimized.drawio.pdf, id=162, 262.0992pt x 171.7617
+[12<./pics/fsm_live/FFT_RFD_complex.png>]
+<pics/Registertransferfolge-optimized.drawio.pdf, id=174, 262.0992pt x 171.7617
 pt>
 File: pics/Registertransferfolge-optimized.drawio.pdf Graphic file (type pdf)
 <use pics/Registertransferfolge-optimized.drawio.pdf>
 Package luatex.def Info: pics/Registertransferfolge-optimized.drawio.pdf  used 
-on input line 299.
+on input line 341.
 (luatex.def)             Requested size: 426.79141pt x 279.6939pt.
-<pics/Screenshot 2025-01-12 190121.png, id=163, 292.6935pt x 368.577pt>
+<pics/Screenshot 2025-01-12 190121.png, id=175, 292.6935pt x 368.577pt>
 File: pics/Screenshot 2025-01-12 190121.png Graphic file (type png)
 <use pics/Screenshot 2025-01-12 190121.png>
 Package luatex.def Info: pics/Screenshot 2025-01-12 190121.png  used on input l
-ine 306.
+ine 348.
 (luatex.def)             Requested size: 256.07744pt x 322.47032pt.
- [11<./pics/Complex ALU.drawio.png><./pics/Complex MUL.drawio.png><./pics/Comple
-x Datapath architecture.png>] [12<./pics/fsm_live/FFT_RFD_complex.png><./pics/Re
-gistertransferfolge-optimized.drawio.pdf>] [13] [14<./pics/Screenshot 2025-01-12
- 190121.png>] [15
+ [13] [14<./pics/Registertransferfolge-optimized.drawio.pdf><./pics/Screenshot 2
+025-01-12 190121.png>] [15
 
 ] [16
 
-] [17
+]
+[17
 
 ]
 (C:/Users/justu/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstlang1.sty
@@ -1362,7 +1362,7 @@ File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
 
 ]
 
-LaTeX Warning: Empty bibliography on input line 423.
+LaTeX Warning: Empty bibliography on input line 471.
 
 (./main.aux)
  ***********
@@ -1384,14 +1384,14 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 29336 strings out of 475900
+ 29342 strings out of 475900
  100000,1977958 words of node,token memory allocated
  631 words of node memory still in use:
    6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 17 attribute, 74 glue_spec
 , 9 attribute_list, 2 write, 1 pdf_action nodes
-   avail lists: 1:2,2:2536,3:393,4:540,5:476,6:87,7:8667,8:31,9:1396,10:26,11:10
+   avail lists: 1:2,2:2023,3:393,4:540,5:476,6:86,7:8667,8:31,9:1396,10:28,11:10
 84
- 51387 multiletter control sequences out of 65536+600000
+ 51389 multiletter control sequences out of 65536+600000
  46 fonts using 3963367 bytes
  122i,15n,114p,11350b,2367s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/justu/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman6-
@@ -1409,9 +1409,9 @@ pe1/public/amsfonts/cm/cmmi8.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/f
 onts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/justu/AppData/Local/Programs/M
 iKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/justu/AppData/Local/Prog
 rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (19 pages, 992653 bytes).
+Output written on main.pdf (19 pages, 996227 bytes).
 
-PDF statistics: 387 PDF objects out of 1000 (max. 8388607)
- 71 named destinations out of 1000 (max. 1048576)
+PDF statistics: 390 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 1048576)
  225 words of extra memory for PDF output out of 10000 (max. 100000000)
 

@@ -1,0 +1,115 @@
+{
+  "title": "FFT",
+  "include": [
+    "complex_ops.json"
+  ],
+  "states": [
+    {
+      "id": "SETUP1",
+      "rt": [
+        "1 -> C -> sp"
+      ],
+      "next": "SETUP2"
+    },
+    {
+      "id": "SETUP2",
+      "rt": [
+        "2^(len) -> C -> N"
+      ],
+      "next": "OL_TEST1"
+    },
+    {
+      "id": "OL_TEST1",
+      "rt": [
+        "sp -> A ->ALU(-)",
+        "N -> B -> ALU(-)"
+      ],
+      "next": "OL_TEST2"
+    },
+    {
+      "id": "OL_TEST2",
+      "rt": [
+        "sp -> C ->h",
+        "sp -> <<1 -> sp"
+      ],
+      "next": {
+        "ALU,N = 0": "FINISH",
+        "ALU,N = 1": "OL3"
+      }
+    },
+    {
+      "id": "OL3",
+      "rt": [
+        "sp -> C -> do_gen"
+      ],
+      "next": "OL5"
+    },
+    {
+      "id": "OL5",
+      "rt": [
+        "do_gen -> CFP_C -> do",
+        "0 -> C-> k"
+      ],
+      "next": "ML_TEST1"
+    },
+    {
+      "id": "ML_TEST1",
+      "rt": [
+        "ALU1(+) -> C1 -> k",
+        "h -> A -> ALU1(+)",
+        "k -> B -> ALU1(+)",
+        "1 -> A -> ALU2(+)",
+        "k -> B -> ALU2(+)"
+      ],
+      "next": "ML_TEST2",
+      "comment": "ML will have two states, which run the IL states parallel. for ml we have counter k (0:stagepow:len-1), so k = k +sp, test k against N, but we also need to calc the IL end ei = k + sp) we need kp at the start of IL to setup j to k, if IL1 runs parallel, we need the result of the k iteration before it arrives -> solution: calculate k for next iteration in ML2. then ei needs to be ready at the end of IL2, so that we can decide if the IL is ended. since IL2 runs parallel to ML2, we will calculate this cycles ei in ML1. now for the IL iteration. we need to increment k and for addr2 we need k + sp for addr2. we will use IL1 to calculate the new k, which is then finished in IL2, so that the jump can be decided. the IL2 will then be used in the pipleine to calculate the second read address."
+    },
+    {
+      "id": "ML_TEST2",
+      "rt": [
+        "ALU1(+) -> C -> ei",
+        "sp -> A -> ALU1(+)",
+        "k -> B -> ALU1(+)",
+        "ALU2(+) -> C2 -> jplus1",
+        "k -> C -> j"
+      ],
+      "next": {
+        "EIL == 1 && EML ==1": "OL_TEST1",
+        "EIL == 1 && EML ==0": "ML_TEST1",
+        "EIL == 0 && EML ==0": "IL_TEST1"
+      },
+      "comment": "check how next state is handled here, i think since k checks against N-1 and the new val of k is alrdy the next states k, if k == N here, this is the last iteration. therefore, if EIL == 1 && EML == 1, we are done,go back to OL if EIL == 1 && EML == 0, we need to continue with the next ML iteration since il is done , if EIL == 0 && EML == 0, we need to continue with the next IL iteration since il is not finished",
+      "comment": "there is an issue here. the new k is only ready in the next ML1 or IL1"
+    },
+    {
+      "group": "INNER (butterfly loop)",
+      "col": 1,
+      "states": [
+        {
+          "id": "IL_TEST1",
+          "rt": [
+            "1 -> A -> ALU2(+)",
+            "jplus1 -> B -> ALU2(+)"
+          ],
+          "next": "IL_TEST2",
+          "comment": "IL needs to inc j and test against ei"
+        },
+        {
+          "id": "IL_TEST2",
+          "rt": [
+            "ALU2(+) -> C2 -> jplus1",
+            "sp -> A -> ALU1(+)",
+            "k -> B -> ALU1(+)",
+            "jplus1 -> C -> j"
+          ],
+          "next": {
+            "EIL == 1 && EML ==1": "OL_TEST1",
+            "EIL == 1 && EML ==0": "ML_TEST1",
+            "EIL == 0 && EML ==0": "IL_TEST1"
+          },
+          "comment": "second addr will be calculated in pipeline stage 2 here."
+        }
+      ]
+    }
+  ]
+}
