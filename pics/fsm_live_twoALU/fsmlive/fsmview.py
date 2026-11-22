@@ -72,7 +72,8 @@ PAGE = r"""<!doctype html><html><head><meta charset="utf-8"><title>FSM live</tit
 <script>
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const arr=v=>Array.isArray(v)?v:(v==null||v===""?[]:[v]);
-const lines=v=>{const a=arr(v).filter(x=>x!=="");return a.length?a.map(esc).join('<BR ALIGN="LEFT"/>')+'<BR ALIGN="LEFT"/>':' ';};
+const fmt=x=>{const m=/^(.*?\S)\s{2,}(.+)$/.exec(String(x)); return m?esc(m[1])+` <FONT COLOR="#8a8a8a" POINT-SIZE="8"><I>${esc(m[2])}</I></FONT>`:esc(x);};
+const lines=v=>{const a=arr(v).filter(x=>x!=="");return a.length?a.map(fmt).join('<BR ALIGN="LEFT"/>')+'<BR ALIGN="LEFT"/>':' ';};
 const subst=(v,m)=>typeof v==="string"?v.replace(/\{(\w+)\}/g,(x,k)=>m&&k in m?m[k]:x):Array.isArray(v)?v.map(x=>subst(x,m)):v;
 const short=id=>String(id).split("›").pop();
 let C="#2F5F8F", SUBS={}, WARN=[];
@@ -140,22 +141,29 @@ function resolve(t,scope,callerId,e,out,depth){
 // empty rows of the Fig. 5 box shrink to a thin strip instead of a full text line
 const cell=v=>arr(v).filter(x=>x!=="").length?`<TD ALIGN="LEFT" BALIGN="LEFT">${lines(v)}</TD>`:'<TD><FONT POINT-SIZE="2"> </FONT></TD>';
 // branch=true: one sub-row per condition with PORT="c<i>", so each jump starts at its condition text
+let RTW=150, NXW=90, SHOWMF=true;   // set per render in toDot: uniform box widths, mem/flags rows only if used
 function stateNode(s,nextTxt,branch){
   const mem=s.mem?`<TD BGCOLOR="#4FA3E0" ALIGN="LEFT"><FONT COLOR="white"><B>M</B></FONT> ${esc(s.mem)}</TD>`:cell("");
   const rt=arr(s.rt).filter(x=>x!=="").length?lines(s.rt):'<FONT COLOR="#999999">(no transfer)</FONT>';
-  const next=branch?`<TD CELLPADDING="0"><TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">`+
-    nextTxt.map((t,i)=>`<TR><TD PORT="c${i}" ALIGN="LEFT">${esc(t)}</TD></TR>`).join("")+`</TABLE></TD>`:cell(nextTxt);
-  return `"${s.id}"[tooltip="${esc(s.id)}" label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="2" COLOR="${C}">`+
-    `<TR><TD ROWSPAN="4" ALIGN="LEFT" BALIGN="LEFT" WIDTH="150">${rt}</TD>${mem}</TR>`+
-    `<TR>${cell(s.flags)}</TR>`+
-    `<TR>${next}</TR>`+
-    `<TR><TD BGCOLOR="#7FFFFF" ALIGN="LEFT" WIDTH="90"><FONT POINT-SIZE="11"><B>${esc(short(s.id))}</B></FONT></TD></TR></TABLE>>];`;
+  const next=branch?`<TD PORT="in" CELLPADDING="0"><TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">`+
+    nextTxt.map((t,i)=>`<TR><TD PORT="c${i}" ALIGN="LEFT">${esc(t)}</TD></TR>`).join("")+`</TABLE></TD>`:cell(nextTxt).replace("<TD","<TD PORT=\"in\"");
+  const name=`<TD PORT="nm" BGCOLOR="#7FFFFF" ALIGN="LEFT" WIDTH="${NXW}"><FONT POINT-SIZE="11"><B>${esc(short(s.id))}</B></FONT></TD>`;
+  return `"${s.id}"[tooltip="${esc(s.id)}" label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="${C}">`+
+    (SHOWMF?`<TR><TD ROWSPAN="4" ALIGN="LEFT" BALIGN="LEFT" VALIGN="TOP" WIDTH="${RTW}">${rt}</TD>${mem}</TR><TR>${cell(s.flags)}</TR><TR>${next}</TR>`
+           :`<TR><TD ROWSPAN="2" ALIGN="LEFT" BALIGN="LEFT" VALIGN="TOP" WIDTH="${RTW}">${rt}</TD>${next}</TR>`)+
+    `<TR>${name}</TR></TABLE>>];`;
 }
 
 function toDot(g,doExpand,stubs){
   C=g.color||"#2F5F8F";
-  const head=[`digraph fsm{rankdir=TB;nodesep=0.35;ranksep=0.3;splines=spline;newrank=true;`,
-   `node[shape=plain fontname="Arial" fontsize=10];edge[color="${C}" fontcolor="${C}" fontname="Arial" fontsize=9];`];
+  const allS=[]; (function w(l){for(const x of l||[]) x&&Array.isArray(x.states)&&x.group!==undefined?w(x.states):allS.push(x);})(g.states);
+  for(const d of Object.values(SUBS)) allS.push(...d.states);
+  SHOWMF=allS.some(s=>s&&(s.mem||arr(s.flags).some(x=>x!=="")));
+  const len=x=>{const m=/^(.*?\S)\s{2,}(.+)$/.exec(String(x)); return m?m[1].length+m[2].length*0.8+1:String(x).length;};
+  RTW=Math.max(150,...allS.flatMap(s=>arr(s&&s.rt).map(x=>Math.ceil(len(x)*5.4)+10)));
+  NXW=Math.max(90,...allS.flatMap(s=>nextList(s&&s.next).map(([c,t])=>Math.ceil(((c?c+": ":"")+t).length*5.6)+10)));
+  const head=[`digraph fsm{rankdir=TB;nodesep=0.5;ranksep=0.45;splines=spline;newrank=true;pad=0.2;`,
+   `node[shape=plain fontname="Arial" fontsize=10];edge[color="${C}" fontcolor="${C}" fontname="Arial" fontsize=9 penwidth=1.2 arrowsize=0.8];`];
   if(!g.states) return defsOnly(head);
   const {flat,groups}=flatten(g.states);
   let entries=doExpand?expandList(flat,{prefix:"",ret:null,m:{}},0):flat;
@@ -199,7 +207,7 @@ function toDot(g,doExpand,stubs){
   const colOfNode=id=>colOf[groupOf.get(id)];
   // how a jump is drawn (see edges below): as connector tags, or as a line inside the column
   const asTag=(a,b)=>{const pa=pos.get(a), pb=pos.get(b);
-    return colOfNode(a)!==colOfNode(b)||(groupOf.get(a)!==groupOf.get(b)&&stubs)||(pa&&pb&&pa[0]===pb[0]&&Math.abs(pb[1]-pa[1])>2);};
+    return colOfNode(a)!==colOfNode(b)||(groupOf.get(a)!==groupOf.get(b)&&stubs)||(pa&&pb&&pa[0]===pb[0]&&Math.abs(pb[1]-pa[1])>1);};
   // condition rows of a branch state, ordered by where their arrow goes: up first, then sideways
   // (tags, terminal states), down last. The arrows then fan out from the box without crossing.
   const heading=(a,b)=>{if(asTag(a,b)) return 0; const pa=pos.get(a), pb=pos.get(b);
@@ -245,7 +253,9 @@ function toDot(g,doExpand,stubs){
       if(!incoming.get(b).includes(short(a))) incoming.get(b).push(short(a));
       continue;
     }
-    const [t,h]=same&&pb[1]===pa[1]+1&&!port?["s","n"]:["e","e"];
+    // jumps along the right side: from above they enter the target top right, from below bottom right,
+    // so lines going down and lines coming back up do not merge into one bundle
+    const [t,h]=same&&pb[1]===pa[1]+1&&!port?["s","n"]:["e",!pb?"w":!same?"e":pb[1]>pa[1]?"in:e":"nm:e"];
     body.push(`${from(t)}->"${b}":${h}[${[lab,"constraint=false"].filter(Boolean).join(",")}];`);
   }
   for(const[b,srcs] of incoming){
@@ -254,7 +264,7 @@ function toDot(g,doExpand,stubs){
     // a state with its own "→" tags keeps the "from" tag next to the box, so no arrow crosses a tag
     for(const out of outTags.get(b)||[]) body.push(`"${inn}"->"${out}"[style=invis];`);
   }
-  for(const[a,b] of anchors) body.push(`"${a}"->"${b}"[style=invis];`);
+  for(const[a,b] of anchors) body.push(`{rank=same;"${a}";"${b}"}`);
   // sequence chain inside each top group
   const seqOf=gi=>order.filter(id=>nodes.get(id).top===gi);
   groups.forEach((_,gi)=>{const q=seqOf(gi); for(let i=1;i<q.length;i++) body.push(`"${q[i-1]}"->"${q[i]}"[style=invis weight=20];`);});

@@ -1,113 +1,81 @@
 {
   "title": "FFT",
-  "include": [
-    "complex_ops.json"
-  ],
+  "include": ["complex_ops.json"],
+  "comment": "Comparators (equals32, not ALUs): EOL = (sp == N); EML = (k == N), k through the bypass MUX I125; EIL = (ei == next j). In ML_2, ei is ALU1 directly (mux_com_inner_loop_eil) and next j is ALU2 directly (mux_com_inner_loop_addr2). In IL_2, ei comes from the register and next j from ALU2.",
   "states": [
     {
-      "id": "SETUP1",
+      "id": "SETUP",
       "rt": [
-        "1 -> C -> sp"
+        "pow2 -> D -> N",
+        "2 -> D -> sp",
+        "0 -> D -> k",
+        "0 -> D -> addr2",
+        "1.0 -> D -> o",
+        "1 -> A -> ALU1(+)",
+        "h -> B -> ALU1(+)",
+        "ALU1 -> D -> ei  only so that ei is not 0"
       ],
-      "next": "SETUP2"
+      "next": "ML_1"
     },
     {
-      "id": "SETUP2",
+      "id": "OL_1",
       "rt": [
-        "2^(len) -> C -> N"
+        "sp -> <<1 -> sp",
+        "0 -> D -> k"
       ],
-      "next": "OL_TEST1"
+      "next": { "EOL == 1": "HALT", "EOL == 0": "ML_1" },
+      "comment": "EOL compares the old sp (before the shift). domega comes combinationally from the ROM delta_omega(sp), so there is nothing to do here for it."
     },
     {
-      "id": "OL_TEST1",
+      "id": "ML_1",
       "rt": [
-        "sp -> A ->ALU(-)",
-        "N -> B -> ALU(-)"
-      ],
-      "next": "OL_TEST2"
-    },
-    {
-      "id": "OL_TEST2",
-      "rt": [
-        "sp -> C ->h",
-        "sp -> <<1 -> sp"
-      ],
-      "next": {
-        "ALU,N = 0": "FINISH",
-        "ALU,N = 1": "OL3"
-      }
-    },
-    {
-      "id": "OL3",
-      "rt": [
-        "sp -> C -> do_gen"
-      ],
-      "next": "OL5"
-    },
-    {
-      "id": "OL5",
-      "rt": [
-        "do_gen -> CFP_C -> do",
-        "0 -> C-> k"
-      ],
-      "next": "ML_TEST1"
-    },
-    {
-      "id": "ML_TEST1",
-      "rt": [
-        "ALU1(+) -> C1 -> k",
+        "ALU1 -> D -> k  only directly after ML_2 (delay flag)",
         "h -> A -> ALU1(+)",
         "k -> B -> ALU1(+)",
         "1 -> A -> ALU2(+)",
         "k -> B -> ALU2(+)"
       ],
-      "next": "ML_TEST2",
-      "comment": "ML will have two states, which run the IL states parallel. for ml we have counter k (0:stagepow:len-1), so k = k +sp, test k against N, but we also need to calc the IL end ei = k + sp) we need kp at the start of IL to setup j to k, if IL1 runs parallel, we need the result of the k iteration before it arrives -> solution: calculate k for next iteration in ML2. then ei needs to be ready at the end of IL2, so that we can decide if the IL is ended. since IL2 runs parallel to ML2, we will calculate this cycles ei in ML1. now for the IL iteration. we need to increment k and for addr2 we need k + sp for addr2. we will use IL1 to calculate the new k, which is then finished in IL2, so that the jump can be decided. the IL2 will then be used in the pipleine to calculate the second read address."
+      "next": { "EML == 1": "OL_1", "EML == 0": "ML_2" },
+      "comment": "P1 of the group's first butterfly. ALU1 computes ei = k + h, ALU2 computes the next j = k + 1. Directly after ML_2, k is the bypassed ALU1 output (MUX I125). So ALU1, ALU2 and EML already see the new k in the same cycle it is written."
     },
     {
-      "id": "ML_TEST2",
+      "id": "ML_2",
       "rt": [
-        "ALU1(+) -> C -> ei",
+        "ALU1 -> D -> ei",
         "sp -> A -> ALU1(+)",
         "k -> B -> ALU1(+)",
-        "ALU2(+) -> C2 -> jplus1",
-        "k -> C -> j"
+        "ALU2 -> D -> jplus1",
+        "k -> D -> addr2",
+        "h -> A -> ALU2(+)",
+        "k -> B -> ALU2(+)"
       ],
-      "next": {
-        "EIL == 1 && EML ==1": "OL_TEST1",
-        "EIL == 1 && EML ==0": "ML_TEST1",
-        "EIL == 0 && EML ==0": "IL_TEST1"
-      },
-      "comment": "check how next state is handled here, i think since k checks against N-1 and the new val of k is alrdy the next states k, if k == N here, this is the last iteration. therefore, if EIL == 1 && EML == 1, we are done,go back to OL if EIL == 1 && EML == 0, we need to continue with the next ML iteration since il is done , if EIL == 0 && EML == 0, we need to continue with the next IL iteration since il is not finished",
-      "comment": "there is an issue here. the new k is only ready in the next ML1 or IL1"
+      "next": { "EIL == 1": "ML_1", "EIL == 0": "IL_1" },
+      "comment": "P2: addr2 = j = k, ALU2 computes addr1 = k + h. ALU1 computes the next k = k + sp, which is written one cycle later. EIL here means h == 1, i.e. one butterfly per group."
     },
     {
       "group": "INNER (butterfly loop)",
       "col": 1,
       "states": [
         {
-          "id": "IL_TEST1",
+          "id": "IL_1",
           "rt": [
+            "ALU1 -> D -> k  only directly after ML_2 (delay flag)",
             "1 -> A -> ALU2(+)",
             "jplus1 -> B -> ALU2(+)"
           ],
-          "next": "IL_TEST2",
-          "comment": "IL needs to inc j and test against ei"
+          "next": "IL_2",
+          "comment": "P1: ALU2 computes the next j = jplus1 + 1."
         },
         {
-          "id": "IL_TEST2",
+          "id": "IL_2",
           "rt": [
-            "ALU2(+) -> C2 -> jplus1",
-            "sp -> A -> ALU1(+)",
-            "k -> B -> ALU1(+)",
-            "jplus1 -> C -> j"
+            "ALU2 -> D -> jplus1",
+            "jplus1 -> D -> addr2",
+            "h -> A -> ALU2(+)",
+            "jplus1 -> B -> ALU2(+)"
           ],
-          "next": {
-            "EIL == 1 && EML ==1": "OL_TEST1",
-            "EIL == 1 && EML ==0": "ML_TEST1",
-            "EIL == 0 && EML ==0": "IL_TEST1"
-          },
-          "comment": "second addr will be calculated in pipeline stage 2 here."
+          "next": { "EIL == 1": "ML_1", "EIL == 0": "IL_1" },
+          "comment": "P2: addr2 = j = old jplus1, ALU2 computes addr1 = j + h. EIL compares the next j (ALU2 output) with ei."
         }
       ]
     }
