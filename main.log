@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.10.14)  12 NOV 2026 20:20
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.10.14)  25 NOV 2026 14:43
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/justu/Documents/nui/TUD/SSE/main
@@ -1216,7 +1216,7 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:flowchart' on page 6 undefined on input line 112.
 
 
-<pics/FFT_flowchart.png, id=109, 266.9975pt x 492.84125pt>
+<pics/FFT_flowchart.png, id=115, 266.9975pt x 492.84125pt>
 File: pics/FFT_flowchart.png Graphic file (type png)
 <use pics/FFT_flowchart.png>
 Package luatex.def Info: pics/FFT_flowchart.png  used on input line 131.
@@ -1232,7 +1232,7 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:unoptimized_datapath' on page 6 undefined on inpu
 t line 135.
 
-<pics/Datapath architecture.drawio.png, id=111, 965.6075pt x 604.2575pt>
+<pics/Datapath architecture.drawio.png, id=117, 965.6075pt x 604.2575pt>
 File: pics/Datapath architecture.drawio.png Graphic file (type png)
 <use pics/Datapath architecture.drawio.png>
 Package luatex.def Info: pics/Datapath architecture.drawio.png  used on input l
@@ -1255,7 +1255,7 @@ LaTeX Warning: Reference `fig:complex_operations_RFD' on page 6 undefined on in
 put line 155.
 
 <pics/fsm_live/Complex_substates_FP_A_FP_B_operands_FP_C_write-back_scratch_rd_
-.png, id=114, 1464.47125pt x 1935.23pt>
+.png, id=120, 1464.47125pt x 1935.23pt>
 File: pics/fsm_live/Complex_substates_FP_A_FP_B_operands_FP_C_write-back_scratc
 h_rd_.png Graphic file (type png)
 <use pics/fsm_live/Complex_substates_FP_A_FP_B_operands_FP_C_write-back_scratch
@@ -1271,7 +1271,7 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:unoptimized_FSM_RFD' on page 6 undefined on input
  line 168.
 
-<pics/fsm_live/FFT.png, id=116, 2181.14874pt x 3897.56125pt>
+<pics/fsm_live/FFT.png, id=122, 2181.14874pt x 3897.56125pt>
 File: pics/fsm_live/FFT.png Graphic file (type png)
 <use pics/fsm_live/FFT.png>
 Package luatex.def Info: pics/fsm_live/FFT.png  used on input line 177.
@@ -1279,12 +1279,12 @@ Package luatex.def Info: pics/fsm_live/FFT.png  used on input line 177.
 [6
 
 ] [7<./pics/FFT_flowchart.png>]
-<pics/Complex ALU.drawio.png, id=133, 292.09125pt x 296.10625pt>
+<pics/Complex ALU.drawio.png, id=139, 292.09125pt x 296.10625pt>
 File: pics/Complex ALU.drawio.png Graphic file (type png)
 <use pics/Complex ALU.drawio.png>
 Package luatex.def Info: pics/Complex ALU.drawio.png  used on input line 214.
 (luatex.def)             Requested size: 128.03871pt x 129.8037pt.
-<pics/Complex MUL.drawio.png, id=134, 584.1825pt x 537.00626pt>
+<pics/Complex MUL.drawio.png, id=140, 584.1825pt x 537.00626pt>
 File: pics/Complex MUL.drawio.png Graphic file (type png)
 <use pics/Complex MUL.drawio.png>
 Package luatex.def Info: pics/Complex MUL.drawio.png  used on input line 221.
@@ -1298,7 +1298,7 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:complex_unoptimized_datapath' on page 8 undefined
  on input line 230.
 
-<pics/Complex Datapath architecture.png, id=136, 965.6075pt x 604.2575pt>
+<pics/Complex Datapath architecture.png, id=142, 965.6075pt x 604.2575pt>
 File: pics/Complex Datapath architecture.png Graphic file (type png)
 <use pics/Complex Datapath architecture.png>
 Package luatex.def Info: pics/Complex Datapath architecture.png  used on input 
@@ -1312,7 +1312,7 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:unoptimized_complex_FSM_RFD' on page 8 undefined 
 on input line 242.
 
-<pics/fsm_live/FFT_RFD_complex.png, id=138, 2173.11874pt x 2248.4pt>
+<pics/fsm_live/FFT_RFD_complex.png, id=144, 2173.11874pt x 2248.4pt>
 File: pics/fsm_live/FFT_RFD_complex.png Graphic file (type png)
 <use pics/fsm_live/FFT_RFD_complex.png>
 Package luatex.def Info: pics/fsm_live/FFT_RFD_complex.png  used on input line 
@@ -1322,32 +1322,324 @@ Package luatex.def Info: pics/fsm_live/FFT_RFD_complex.png  used on input line
 s_FP_A_FP_B_operands_FP_C_write-back_scratch_rd_.png>] [10<./pics/fsm_live/FFT.p
 ng>] [11<./pics/Complex ALU.drawio.png><./pics/Complex MUL.drawio.png><./pics/Co
 mplex Datapath architecture.png>]
-Underfull \hbox (badness 1776) in paragraph at lines 327--327
-[][][]|\TU/lmr/m/n/12 Da-ten-trans-fer-ope-ra-tio-nen der Da-ten-pfad-ar-chi-tek
--tur. Bei Kon-stan-ten
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:295: Missing $ inserted.
+<inserted text> 
+                $
+l.295 		3             & omega * d_
+                                  omega #1; load(addr1)                     ...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:295: You can't use `macro paramete
+r character #' in math mode.
+l.295 		3             & omega * d_omega #
+                                         1; load(addr1)                     ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:295: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.295 ...                                \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:295: Missing $ inserted.
+<inserted text> 
+                $
+l.295 ...                                \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:295: Missing } inserted.
+<inserted text> 
+                }
+l.295 ...                                \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: Missing $ inserted.
+<inserted text> 
+                $
+l.296 		4             & omega * d_
+                                  omega #2; omega * data1 #1: load(addr2); a...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: You can't use `macro paramete
+r character #' in math mode.
+l.296 		4             & omega * d_omega #
+                                         2; omega * data1 #1: load(addr2); a...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: You can't use `macro paramete
+r character #' in math mode.
+l.296 ...    & omega * d_omega #2; omega * data1 #
+                                                  1: load(addr2); addr2_2 = ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.296 ...1: load(addr2); addr2_2 = addr2 \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: Missing $ inserted.
+<inserted text> 
+                $
+l.296 ...1: load(addr2); addr2_2 = addr2 \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:296: Missing } inserted.
+<inserted text> 
+                }
+l.296 ...1: load(addr2); addr2_2 = addr2 \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:297: You can't use `macro paramete
+r character #' in restricted horizontal mode.
+l.297 		5             & omega * data1 #
+                                       2; addr1_2 = addr1                   ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:297: Missing $ inserted.
+<inserted text> 
+                $
+l.297 		5             & omega * data1 #2; addr1_
+                                                2 = addr1                   ...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:297: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.297 ...                                \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:297: Missing $ inserted.
+<inserted text> 
+                $
+l.297 ...                                \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:297: Missing } inserted.
+<inserted text> 
+                }
+l.297 ...                                \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:298: Missing $ inserted.
+<inserted text> 
+                $
+l.298 		6             & alu end plus; addr2_
+                                            2 = addr2_1                     ...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:298: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.298 ...                                \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:298: Missing $ inserted.
+<inserted text> 
+                $
+l.298 ...                                \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:298: Missing } inserted.
+<inserted text> 
+                }
+l.298 ...                                \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:299: Missing $ inserted.
+<inserted text> 
+                $
+l.299 		7             & alu end minu; store(addr2_
+                                                  2); addr2_2 = addr2_1     ...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:299: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.299 ..._2 = addr2_1                    \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:299: Missing $ inserted.
+<inserted text> 
+                $
+l.299 ..._2 = addr2_1                    \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:299: Missing } inserted.
+<inserted text> 
+                }
+l.299 ..._2 = addr2_1                    \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:300: Missing $ inserted.
+<inserted text> 
+                $
+l.300 		8             & store(addr1_
+                                    2)                                      ...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:300: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
+l.300 ...                                \\ \hline
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:300: Missing $ inserted.
+<inserted text> 
+                $
+l.300 ...                                \\ \hline
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:300: Missing } inserted.
+<inserted text> 
+                }
+l.300 ...                                \\ \hline
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:308: You can't use `macro paramete
+r character #' in restricted horizontal mode.
+l.308 		FSM STATE       & ALU ML & ALU IL & CMUL #
+                                                   1 & CMUL # 2 & LOAD & STO...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+c:/Users/justu/Documents/nui/TUD/SSE/main.tex:308: You can't use `macro paramete
+r character #' in restricted horizontal mode.
+l.308 ...    & ALU ML & ALU IL & CMUL # 1 & CMUL #
+                                                   2 & LOAD & STORE & CALU \...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+Overfull \hbox (51.72069pt too wide) in paragraph at lines 306--323
+ [][] 
+ []
+
+<pics/RTF_two_ALU.png, id=175, 1050.8058pt x 581.0508pt>
+File: pics/RTF_two_ALU.png Graphic file (type png)
+<use pics/RTF_two_ALU.png>
+Package luatex.def Info: pics/RTF_two_ALU.png  used on input line 336.
+(luatex.def)             Requested size: 426.79141pt x 235.99811pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 337--337
+[][][]|\TU/lmr/m/n/12 Re-gis-ter-trans-fer-fol-ge der 2-ALU-FSM. Zu-stän-de SET
+-UP,
+ []
+
+
+Underfull \hbox (badness 1231) in paragraph at lines 337--337
+\TU/lmr/m/n/12 ML_1/ML_2, IL_1/IL_2, OL_1, HALT; Trans-fers mit Zu-satz
  []
 
 [12<./pics/fsm_live/FFT_RFD_complex.png>]
-<pics/Registertransferfolge-optimized.drawio.pdf, id=174, 262.0992pt x 171.7617
-pt>
-File: pics/Registertransferfolge-optimized.drawio.pdf Graphic file (type pdf)
-<use pics/Registertransferfolge-optimized.drawio.pdf>
-Package luatex.def Info: pics/Registertransferfolge-optimized.drawio.pdf  used 
-on input line 341.
-(luatex.def)             Requested size: 426.79141pt x 279.6939pt.
-<pics/Screenshot 2025-01-12 190121.png, id=175, 292.6935pt x 368.577pt>
-File: pics/Screenshot 2025-01-12 190121.png Graphic file (type png)
-<use pics/Screenshot 2025-01-12 190121.png>
-Package luatex.def Info: pics/Screenshot 2025-01-12 190121.png  used on input l
-ine 348.
-(luatex.def)             Requested size: 256.07744pt x 322.47032pt.
- [13] [14<./pics/Registertransferfolge-optimized.drawio.pdf><./pics/Screenshot 2
-025-01-12 190121.png>] [15
+Underfull \hbox (badness 1509) in paragraph at lines 352--352
+[][][]|\TU/lmr/m/n/12 Da-ten-trans-fer-ope-ra-tio-nen der Da-ten-pfad-ar-chi-tek
+-tur mit 2 Ganz-zahl
+ []
 
-] [16
-
-]
+<pics/DP_TWO ALU.drawio.png, id=183, 692.5875pt x 551.05875pt>
+File: pics/DP_TWO ALU.drawio.png Graphic file (type png)
+<use pics/DP_TWO ALU.drawio.png>
+Package luatex.def Info: pics/DP_TWO ALU.drawio.png  used on input line 358.
+(luatex.def)             Requested size: 426.79141pt x 339.5844pt.
+[13] [14<./pics/RTF_two_ALU.png>] [15] [16<./pics/DP_TWO ALU.drawio.png>]
 [17
+
+] [18
 
 ]
 (C:/Users/justu/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstlang1.sty
@@ -1356,13 +1648,13 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 (C:/Users/justu/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
 )
-(./code/helloworld.c) [18
+(./code/helloworld.c) [19
 
-] [19
+] [20
 
 ]
 
-LaTeX Warning: Empty bibliography on input line 471.
+LaTeX Warning: Empty bibliography on input line 488.
 
 (./main.aux)
  ***********
@@ -1384,34 +1676,33 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 29342 strings out of 475900
+ 29362 strings out of 475900
  100000,1977958 words of node,token memory allocated
- 631 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 17 attribute, 74 glue_spec
-, 9 attribute_list, 2 write, 1 pdf_action nodes
-   avail lists: 1:2,2:2023,3:393,4:540,5:476,6:86,7:8667,8:31,9:1396,10:28,11:10
+ 624 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 15 attribute, 75 glue_spec
+, 8 attribute_list, 2 write nodes
+   avail lists: 1:2,2:1867,3:433,4:540,5:476,6:96,7:8667,8:45,9:1396,10:28,11:10
 84
- 51389 multiletter control sequences out of 65536+600000
- 46 fonts using 3963367 bytes
+ 51404 multiletter control sequences out of 65536+600000
+ 45 fonts using 3831679 bytes
  122i,15n,114p,11350b,2367s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/justu/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman6-
 regular.otf><c:/users/justu/appdata/local/programs/miktex/fonts/opentype/public/
-lm/lmroman12-italic.otf><c:/users/justu/appdata/local/programs/miktex/fonts/open
-type/public/lm/lmroman10-regular.otf><c:/users/justu/appdata/local/programs/mikt
-ex/fonts/opentype/public/lm/lmmono12-regular.otf><c:/users/justu/appdata/local/p
-rograms/miktex/fonts/opentype/public/lm/lmsans10-bold.otf><c:/users/justu/appdat
-a/local/programs/miktex/fonts/opentype/public/lm/lmromancaps10-regular.otf><c:/u
-sers/justu/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman12-regu
-lar.otf><c:/users/justu/appdata/local/programs/miktex/fonts/opentype/public/lm/l
-mroman12-bold.otf><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmmi12.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmmi8.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/justu/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/justu/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (19 pages, 996227 bytes).
+lm/lmroman10-regular.otf><c:/users/justu/appdata/local/programs/miktex/fonts/ope
+ntype/public/lm/lmmono12-regular.otf><c:/users/justu/appdata/local/programs/mikt
+ex/fonts/opentype/public/lm/lmsans10-bold.otf><c:/users/justu/appdata/local/prog
+rams/miktex/fonts/opentype/public/lm/lmromancaps10-regular.otf><c:/users/justu/a
+ppdata/local/programs/miktex/fonts/opentype/public/lm/lmroman12-regular.otf><c:/
+users/justu/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman12-bol
+d.otf><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmmi12.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmmi8.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmr8.pfb><C:/Users/justu/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on main.pdf (20 pages, 1258943 bytes).
 
-PDF statistics: 390 PDF objects out of 1000 (max. 8388607)
- 75 named destinations out of 1000 (max. 1048576)
- 225 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 394 PDF objects out of 1000 (max. 8388607)
+ 80 named destinations out of 1000 (max. 1048576)
+ 249 words of extra memory for PDF output out of 10000 (max. 100000000)
 

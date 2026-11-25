@@ -286,119 +286,135 @@ werden kann.Die Optimierung der Schleifeniteration, sodass der benötigte
 Durchsatz in der Pipeline erreicht werden kann, wird in einem späteren Kapitel
 behandelt. % TODO create diagramm which shows the pipline datapath whcih is put into cycles. also put in the list which shows which units are used each cycle
 
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|l|l|}\hline
+		Pipelinestufe & Operationen                                                        \\ \hline
+		1             & addr2 = ...                                                        \\ \hline
+		2             & addr1 = ...                                                        \\ \hline
+		3             & omega * d_omega #1; load(addr1)                                    \\ \hline
+		4             & omega * d_omega #2; omega * data1 #1: load(addr2); addr2_2 = addr2 \\ \hline
+		5             & omega * data1 #2; addr1_2 = addr1                                  \\ \hline
+		6             & alu end plus; addr2_2 = addr2_1                                    \\ \hline
+		7             & alu end minu; store(addr2_2); addr2_2 = addr2_1                    \\ \hline
+		8             & store(addr1_2)                                                     \\ \hline
+	\end{tabular}
+\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|l|l|}
+		\hline
+		FSM STATE       & ALU ML & ALU IL & CMUL # 1 & CMUL # 2 & LOAD & STORE & CALU \\ \hline
+		ML1(dispatch A) & A1     & A1     &          &          &      &       &      \\ \hline
+		ML2             & A2     & A2     &          &          &      &       &      \\ \hline
+		IL1(dispatch B) &        & B1     & A3       &          & A3   &       &      \\ \hline
+		IL2             &        & B2     & A4       & A4       & A4   &       &      \\ \hline
+		IL1(dispatch C) &        & C1     & B3       & A5       & B3   &       &      \\ \hline
+		IL2             &        & C2     & B4       & B4       & B4   &       & A6   \\ \hline
+		IL1(dispatch D) &        & D1     & C3       & B5       & C3   & A7    & A7   \\ \hline
+		IL2             &        & D2     & C4       & C4       & C4   & A8    & B6   \\ \hline
+		ML1(dispatch E) & E1     & E1     & D3       & C5       & D3   & B7    & B7   \\ \hline
+		ML2             & E2     & E2     & D4       & D4       & D4   & B8    & C6   \\ \hline
+		ML1(dispatch F) & F1     & F1     & E3       & D5       & E3   & C7    & C7   \\ \hline
+		ML2             & F2     & F2     & E4       & E4       & E4   & C8    & D6   \\ \hline
+
+	\end{tabular}
+\end{table}
+
 \subsection{Optimierte Datenpfadarchitektur - 2 ALUs}
 Um den benötigten Durchsatz zu erreichen ist, wie im vorherigen Kapitel
 beschrieben, nötig, die mittlere und innere Schleife parallel und innerhalb von
 zwei Takten auszuführen. Da in Mittleren und innerem loop mindestens zwei
 Additionen, nur für die Schleifensteuerung nötig sind, wird eine zweite
-Ganzzahl ALU benötigt. Das Diagramm zeigt die dementsprechende
-Datenpfadarchitektur, wobei schon nur die benötigten Datenpfadelemente mit den
-jeweiligen Eingängen verbunden sind.Im Diagramm ist die optimierte
-Registertransferfolge dargestellt. % TODO diagramm Datenpfadarchitektur 2 ALUs% TODO registertransferfolgendiagramm
+Ganzzahl ALU benötigt. Das Diagramm \ref{fig:dp_2alu} zeigt die
+dementsprechende Datenpfadarchitektur, wobei schon nur die benötigten
+Datenpfadelemente mit den jeweiligen Eingängen verbunden sind.Im Diagramm
+\ref{fig:fsm_2alu} ist die optimierte Registertransferfolge dargestellt. % TODO diagramm Datenpfadarchitektur 2 ALUs
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{pics/RTF_two_ALU.png}
+	\caption{Registertransferfolge der 2-ALU-FSM. Zustände SETUP, ML\_1/ML\_2, IL\_1/IL\_2, OL\_1, HALT; Transfers mit Zusatz \glqq delay flag\grqq{} finden nur im Takt direkt nach ML\_2 statt.}
+	\label{fig:fsm_2alu}
+\end{figure}
 
 \begin{table}[ht]
 	\centering
-	\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}\hline
-		Ziel        & Quellen    & 1       & 2  & 3   & 4  & 5   & 6    & 7  & 8  \\ \hline \hline
-		R1          & \leftarrow & 0       & T1 &     &    &     &      &    &    \\ \hline
-		R3          & \leftarrow & 0       & T1 &     &    &     &      &    &    \\ \hline
-		RR          & \leftarrow & 0       & T1 &     &    &     &      &    &    \\ \hline
-		RC          & \leftarrow & 0       & T1 &     &    &     &      &    &    \\ \hline
-		R2          & \leftarrow & 0       & T2 &     &    &     &      &    &    \\ \hline
-		R4          & \leftarrow & 0       & T2 &     &    &     &      &    &    \\ \hline
-		RCX         & \leftarrow & T1      &    &     &    &     &      &    &    \\ \hline
-		RCY         & \leftarrow & T1      &    &     &    &     &      &    &    \\ \hline
-		RD          & \leftarrow & T3      &    &     &    &     &      &    &    \\ \hline
-		Rres        & \leftarrow & MEM(DO) &    &     &    &     &      &    &    \\ \hline
-		Riter       & \leftarrow & MEM(DO) &    &     &    &     &      &    &    \\ \hline
-		RI          & \leftarrow & Riter   & T4 &     &    &     &      &    &    \\ \hline
-		Radr        & \leftarrow & T4      &    &     &    &     &      &    &    \\ \hline
-		MEM(ADR)    & \leftarrow & Radr    &    &     &    &     &      &    &    \\ \hline
-		MEM(DI)     & \leftarrow & RI      &    &     &    &     &      &    &    \\ \hline
-		ALU(1)      & \leftarrow & T1      & T2 & 2   & RC & R2  & Rres & RR &    \\ \hline
-		ALU(2)      & \leftarrow & T2      & 2  & RCY & R4 & RCX & 1    & 4  & T1 \\ \hline
-		MUL(1)      & \leftarrow & 2       & RD & T1  & T2 &     &      &    &    \\ \hline
-		MUL(2)      & \leftarrow & RR      & RC & R3  & R1 & T1  &      &    &    \\ \hline
-		DIV(1)      & \leftarrow & 4       &    &     &    &     &      &    &    \\ \hline
-		DIV(2)      & \leftarrow & MEM(DO) &    &     &    &     &      &    &    \\ \hline
-		ALU\_INT(1) & \leftarrow & Radr    & RI &     &    &     &      &    &    \\ \hline
-		ALU\_INT(2) & \leftarrow & CInt 1  &    &     &    &     &      &    &    \\ \hline
+	\begin{tabular}{|l|l|l|l|}\hline
+
+		Quelle1     & Quelle2 & Quelle3 & Ziel \\ \hline \hline pow2 & & & N \\ \hline 2 &
+		            &         & sp             \\ \hline 0 & ALU1 & & k \\ \hline 0 &k &jplus1 &addr2\\ \hline 1.0 & &
+		            & o                        \\ \hline 1 & h & sp & ALU1 (+) \\ \hline h &k& & ALU1 (+) \\ \hline sp <<1
+		            &         &         & sp   \\ \hline 1 & h & & ALU2 (+) \\ \hline k & jplus1 & &ALU2 (+) \\
+		\hline ALU1 &         &         & ei   \\ \hline ALU2 & & & jplus1 \\ \hline pipeline empty & & &
+		ready                                  \\ \hline
 	\end{tabular}
-	\caption{Datentransferoperationen der Datenpfadarchitektur. Bei Konstanten wurde auf das Präfix \textit{Const} verzichtet.}
+	\caption{Datentransferoperationen der Datenpfadarchitektur mit 2 Ganzzahl ALUs}
 	\label{table:datentransfer}
 \end{table}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{pics/DP_TWO ALU.drawio.png}
+	\caption{Datenpfadarchitektur mit 2 Ganzzahl ALU.}
+	\label{fig:dp_2alu}
+\end{figure}
 
 Anschließend wurde die Datenpfadarchitektur erstellt. Als Bild genügt hier der
 Ausdruck aus Cadence.
 
-\subsection{Registertransferfolgen}
-In \autoref{fig:register} seht ihr ein Beispiel der Registertransferfolgen, als
-formschöne Vektorgrafik. Erstellt in drawio. Für den Export wurden die
-Einstellungen in \autoref{fig:screenshot} verwendet.
+\subsection{Eigene Datenpfadelement}
+An einigen Stellen haben die vorgegebenen Datenpfadelemente nicht ausgereicht,
+den gewünschten Durchsatz zu erreichen, oder eine eigene Lösung war deutlich
+praktischer umzusetzen. Für diese Stellen wurden Datenpfadelemente erstellt,
+welche in dieser Sektion beschrieben werden.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{pics/Registertransferfolge-optimized.drawio.pdf}
-	\caption{Registertransferfolgen. Erstellt mit drawio. Source befindet sich in dieser zip Datei.}
-	\label{fig:register}
-\end{figure}
+\subsubsection{Write-through Register}
+Die Variablen omega und t (datax) werden jeweils einmal im gleichen Takt
+gelesen, wie sie geschrieben werden. Dies könnte gelöst werden, indem man am
+jeweiligen Port, in den Variablen geschrieben werden sollen eine MUX
+vorschaltet. Für die Lesbarkeit und übersichtlichkeit war es aber einfacher ein
+Register mit Write-Bypass zu erstellen. Dabei handelt es sich um ein normales
+Register mit einer nachgeschalteten MUX. Wird das Enable Signal aktiviert,
+wählt die MUX den eingang des Registers als ausgang. Dadurch erhält man ein
+Register, welches die Daten übernimmt, sobald das Enable gesetzt wird. Dabei
+muss darauf geachtet werden, das keine Kombinatorische logik in das Register
+schreibt und andere direkt daraus liest. Dies wird mit den gegebenen
+Datenpfadelementen aber sowieso verhindert, da diese Register am Ausgang schon
+enthalten. % todo: replace datax with nuber of data
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{pics/Screenshot 2025-01-12 190121.png}
-	\caption{Exporteinstellungen drawio.}
-	\label{fig:screenshot}
-\end{figure}
-\clearpage
+\subsubsection{delta omega ROM}
+Für Implementierungen auf CPUs, wird delta omega, die Zahl mit der Omega jeden
+Durchlauf multipliziert wird, häufig direkt berechnet. Da diese Zahl sich nur
+zwischen Stufen ändert, und die FFT mit einer Adresslänge von 32 Bit maximal 32
+Stufen hat, kann man allerdings für jede Stufe auch jeweils die Zahl
+vorberechnen. Das erstellte Datenpfadelement macht genau das. Mit einer 5 Bit
+MUX, erstellt aus gestaffelten 1 Bit MUX, wird abhängig von der aktuellenn
+Stufe eine Konstante ausgewählt und ausgegeben.
 
-\subsection{Zustandsgraph}
-Nicht vergessen: Die Zustandskodierung, wie in \autoref{table:zustandskot}
-dargestellt.
+\subsubsection{pow2}
+Der erstellte ASIC kann mit längen von bis zu $2^32$ Elementen arbeiten. Diese
+Länge wird über 5 externe Pins, oder im Falle der Einbindung als IP Block, 5
+Wires eingestellt. FFT längen sind auf Potenzen von 2 begrenzt. Indem man also
+nur den Exponenten einstellen lässt, verhindert man ungültige Eingaben. Dies
+erfordert allerdings einen Potenzierer, welche die tatsächliche Länge abhängig
+vom Exponenten ausrechnen kann. Dies wird mithilfe eines shifters mit input 1
+umgesetzt.
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}[t]{|l|l|}
-		\hline
-		Zustand & Hex-Code \\ \hline \hline
-		IDLE    & 00       \\ \hline
-		INIT1   & 01       \\ \hline
-		INIT2   & 02       \\ \hline
-		INIT3   & 03       \\ \hline
-		INIT4   & 04       \\ \hline
-		INIT5   & 05       \\ \hline
-		INIT6   & 06       \\ \hline
-		INIT7   & 07       \\ \hline
-		INIT8   & 08       \\ \hline
-		INIT9   & 09       \\ \hline
-		RLOOP1  & 0A       \\ \hline
-		RLOOP2  & 0B       \\ \hline
-		RLOOP3  & 0C       \\ \hline
-		CLOOP1  & 0D       \\ \hline
-	\end{tabular}
-	\begin{tabular}[t]{|l|l|}
-		\hline
-		Zustand & Hex-Code \\ \hline \hline
-		CLOOP2  & 0E       \\ \hline
-		CLOOP3  & 0F       \\ \hline
-		ILOOP1  & 10       \\ \hline
-		ILOOP2  & 11       \\ \hline
-		ILOOP3  & 12       \\ \hline
-		ILOOP4  & 13       \\ \hline
-		ILOOP5  & 14       \\ \hline
-		ILOOP6  & 15       \\ \hline
-		ILOOP7  & 16       \\ \hline
-		CLOOP4  & 17       \\ \hline
-		CLOOP5  & 18       \\ \hline
-		CLOOP6  & 19       \\ \hline
-		RLOOP4  & 1A       \\ \hline
-		RLOOP5  & 1B       \\ \hline
-		RLOOP6  & 1C       \\ \hline
-	\end{tabular}
-	\caption{Zustandskodierung}
-	\label{table:zustandskot}
-\end{table}
+\subsubsection{comparator}
+Um den Durchsatz ohne unnötige Hardware zu erreichen ist es nötig, dass im
+selben Takt, wie die FSM ihre Entscheidungen macht, im selben kritischem Pfad
+auch die Endbedingungen der Schleifen verglichen werden. Da die FSM keinen
+langen kritischen Pfad hat, sondern dieser von dem Gleitkommamultiplizierer
+limitiert ist, ist dies möglich. zur umsetzung wird eine Baumstruktur
+verwendet, in der zuerst die einzellnen Bits der beiden Zahlen mit einem XNOR
+verglichen werden. In den restlichen Ebenen des Baumes werden die Eingägnge
+jeweils um zwei reduziert, indem immer zwei Ergebnisse der vorigen Stufe mit
+einem AND verglichen werden.
 
 \subsection{Gesamtschaltung}
+Für die Gesamtschaltung werden FSM, Controllogic und Datenpfad in einer
+Top-level Schematic zusammengefasst. % TODO Diagramm usw... 
 
 \section{Simulation}
 In den folgenden Unterkapiteln wurde die Gesamtschaltung mithilfe der Verilog
@@ -438,7 +454,8 @@ optimiert werden kann. Ein solcher ASIC mit einer Größe von XXXXX ist im
 vergleich zu damaligen Prozessoren z.B: Pentium MMX with 140mm2 ist der
 Schaltkreis vergleichsweise ... Diese Größe wurde erreicht, während der
 Durchsatz möglichst optimiert wurde. Eine Verdopplung des Durchsatzes unter
-Verdopplung des Flächenverbrauches ist noch möglich, indem man % TDOO Taktrate% TODO: reference for single core performance% TODO: final size of the ASIC% TODO reference to prev Processors
+Verdopplung des Flächenverbrauches ist noch möglich, indem man einen zweiten
+Datenpfad parallel laufen lässt. Dafür m% TDOO Taktrate% TODO: reference for single core performance% TODO: final size of the ASIC% TODO reference to prev Processors
 
 \clearpage
 \begin{appendices}

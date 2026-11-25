@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1047pt" height="579pt" viewBox="0.00 0.00 1046.52 579.02" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(14.4 564.62)">
+<title>fsm</title>
+<polygon fill="white" stroke="none" points="-14.4,14.4 -14.4,-564.62 1032.12,-564.62 1032.12,14.4 -14.4,14.4"/>
+<g id="clust1" class="cluster">
+<title>cluster_0</title>
+<polygon fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" points="563.5,-321.76 563.5,-526.16 933.5,-526.16 933.5,-321.76 563.5,-321.76"/>
+<text text-anchor="middle" x="630.18" y="-511.36" font-family="Arial" font-size="12.00" fill="#2f5f8f">INNER (butterfly loop)</text>
+</g>
+<!-- SETUP -->
+<g id="node1" class="node">
+<title>SETUP</title>
+<g id="a_node1"><a xlink:title="SETUP">
+<polygon fill="none" stroke="#2f5f8f" points="1,-422.76 1,-516.76 252,-516.76 252,-422.76 1,-422.76"/>
+<text text-anchor="start" x="6" y="-502.76" font-family="Arial" font-size="10.00">pow2 -&gt; D -&gt; N</text>
+<text text-anchor="start" x="6" y="-490.76" font-family="Arial" font-size="10.00">2 -&gt; D -&gt; sp</text>
+<text text-anchor="start" x="6" y="-478.76" font-family="Arial" font-size="10.00">0 -&gt; D -&gt; k</text>
+<text text-anchor="start" x="6" y="-466.76" font-family="Arial" font-size="10.00">0 -&gt; D -&gt; addr2</text>
+<text text-anchor="start" x="6" y="-454.76" font-family="Arial" font-size="10.00">1.0 -&gt; D -&gt; o</text>
+<text text-anchor="start" x="6" y="-442.76" font-family="Arial" font-size="10.00">1 -&gt; A -&gt; ALU1(+)</text>
+<text text-anchor="start" x="6" y="-430.76" font-family="Arial" font-size="10.00">h -&gt; B -&gt; ALU1(+)</text>
+<polygon fill="none" stroke="#2f5f8f" points="252,-470.36 252,-516.76 352,-516.76 352,-470.36 252,-470.36"/>
+<text text-anchor="start" x="257" y="-490.56" font-family="Arial" font-size="10.00">ML_1</text>
+<polygon fill="#7fffff" stroke="none" points="252,-422.76 252,-470.36 352,-470.36 352,-422.76 252,-422.76"/>
+<polygon fill="none" stroke="#2f5f8f" points="252,-422.76 252,-470.36 352,-470.36 352,-422.76 252,-422.76"/>
+<text text-anchor="start" x="257" y="-444.26" font-family="Arial" font-weight="bold" font-size="11.00">SETUP</text>
+<polygon fill="none" stroke="#2f5f8f" points="0,-421.76 0,-517.76 353,-517.76 353,-421.76 0,-421.76"/>
+</a>
+</g>
+</g>
+<!-- OL_1 -->
+<g id="node2" class="node">
+<title>OL_1</title>
+<g id="a_node2"><a xlink:title="OL_1">
+<polygon fill="none" stroke="#2f5f8f" points="1,-331.16 1,-388.36 252,-388.36 252,-331.16 1,-331.16"/>
+<text text-anchor="start" x="6" y="-374.36" font-family="Arial" font-size="10.00">sp -&gt; &lt;&lt;1 -&gt; sp</text>
+<text text-anchor="start" x="6" y="-362.36" font-family="Arial" font-size="10.00">0 -&gt; D -&gt; k</text>
+<polygon fill="none" stroke="#2f5f8f" points="252,-354.36 252,-388.36 352,-388.36 352,-354.36 252,-354.36"/>
+<text text-anchor="start" x="255" y="-376.36" font-family="Arial" font-size="10.00">EOL == 1: HALT</text>
+<text text-anchor="start" x="255" y="-360.36" font-family="Arial" font-size="10.00">EOL == 0: ML_1</text>
+<polygon fill="#7fffff" stroke="none" points="252,-331.16 252,-354.36 352,-354.36 352,-331.16 252,-331.16"/>
+<polygon fill="none" stroke="#2f5f8f" points="252,-331.16 252,-354.36 352,-354.36 352,-331.16 252,-331.16"/>
+<text text-anchor="start" x="257" y="-340.46" font-family="Arial" font-weight="bold" font-size="11.00">OL_1</text>
+<polygon fill="none" stroke="#2f5f8f" points="0,-330.16 0,-389.36 353,-389.36 353,-330.16 0,-330.16"/>
+</a>
+</g>
+</g>
+<!-- SETUP&#45;&gt;OL_1 -->
+<!-- IL_1 -->
+<g id="node6" class="node">
+<title>IL_1</title>
+<g id="a_node6"><a xlink:title="IL_1">
+<polygon fill="none" stroke="#2f5f8f" points="573,-444.76 573,-494.76 824,-494.76 824,-444.76 573,-444.76"/>
+<text text-anchor="start" x="578" y="-481.76" font-family="Arial" font-size="10.00">ALU1 -&gt; D -&gt; k </text>
+<text text-anchor="start" x="647.47" y="-481.76" font-family="Arial" font-style="italic" font-size="8.00" fill="#8a8a8a">only directly after ML_2 (delay flag)</text>
+<text text-anchor="start" x="578" y="-471.76" font-family="Arial" font-size="10.00">1 -&gt; A -&gt; ALU2(+)</text>
+<text text-anchor="start" x="578" y="-461.76" font-family="Arial" font-size="10.00">jplus1 -&gt; B -&gt; ALU2(+)</text>
+<text text-anchor="start" x="578" y="-451.76" font-family="Arial" font-size="10.00">1.0 -&gt; D -&gt; o </text>
+<text text-anchor="start" x="636.92" y="-451.76" font-family="Arial" font-style="italic" font-size="8.00" fill="#8a8a8a">only directly after ML_2 (delay flag)</text>
+<polygon fill="none" stroke="#2f5f8f" points="824,-470.36 824,-494.76 924,-494.76 924,-470.36 824,-470.36"/>
+<text text-anchor="start" x="829" y="-479.56" font-family="Arial" font-size="10.00">IL_2</text>
+<polygon fill="#7fffff" stroke="none" points="824,-444.76 824,-470.36 924,-470.36 924,-444.76 824,-444.76"/>
+<polygon fill="none" stroke="#2f5f8f" points="824,-444.76 824,-470.36 924,-470.36 924,-444.76 824,-444.76"/>
+<text text-anchor="start" x="829" y="-455.26" font-family="Arial" font-weight="bold" font-size="11.00">IL_1</text>
+<polygon fill="none" stroke="#2f5f8f" points="572,-443.76 572,-495.76 925,-495.76 925,-443.76 572,-443.76"/>
+</a>
+</g>
+</g>
+<!-- SETUP&#45;&gt;IL_1 -->
+<!-- stub0 -->
+<g id="node8" class="node">
+<title>stub0</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M529.5,-478.76C529.5,-478.76 487.5,-478.76 487.5,-478.76 484.5,-478.76 481.5,-475.76 481.5,-472.76 481.5,-472.76 481.5,-466.76 481.5,-466.76 481.5,-463.76 484.5,-460.76 487.5,-460.76 487.5,-460.76 529.5,-460.76 529.5,-460.76 532.5,-460.76 535.5,-463.76 535.5,-466.76 535.5,-466.76 535.5,-472.76 535.5,-472.76 535.5,-475.76 532.5,-478.76 529.5,-478.76"/>
+<text text-anchor="middle" x="508.5" y="-466.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">→ ML_1</text>
+</g>
+<!-- SETUP&#45;&gt;stub0 -->
+<g id="edge1" class="edge">
+<title>SETUP:e-&gt;stub0:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M353.83,-469.76C380.1,-469.76 357.24,-504.1 371.5,-526.16 389.77,-554.42 414.05,-554.12 445.5,-542.16 455.5,-538.36 457.74,-535.18 463.5,-526.16 475.28,-507.72 460.95,-480.7 471.22,-472.33"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="471.79,-475.08 478.75,-470.25 470.29,-469.68 471.79,-475.08"/>
+</g>
+<!-- stub8 -->
+<g id="node16" class="node">
+<title>stub8</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M439.99,-478.76C439.99,-478.76 395.01,-478.76 395.01,-478.76 392.01,-478.76 389.01,-475.76 389.01,-472.76 389.01,-472.76 389.01,-466.76 389.01,-466.76 389.01,-463.76 392.01,-460.76 395.01,-460.76 395.01,-460.76 439.99,-460.76 439.99,-460.76 442.99,-460.76 445.99,-463.76 445.99,-466.76 445.99,-466.76 445.99,-472.76 445.99,-472.76 445.99,-475.76 442.99,-478.76 439.99,-478.76"/>
+<text text-anchor="middle" x="417.5" y="-466.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">from HALT</text>
+</g>
+<!-- SETUP&#45;&gt;stub8 -->
+<g id="edge17" class="edge">
+<title>SETUP:e-&gt;stub8:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M364.45,-469.76C372.32,-469.76 377.63,-469.76 389.01,-469.76"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="362.82,-466.96 354.82,-469.76 362.82,-472.56 362.82,-466.96"/>
+</g>
+<!-- ML_1 -->
+<g id="node3" class="node">
+<title>ML_1</title>
+<g id="a_node3"><a xlink:title="ML_1">
+<polygon fill="none" stroke="#2f5f8f" points="1,-226.76 1,-296.76 252,-296.76 252,-226.76 1,-226.76"/>
+<text text-anchor="start" x="6" y="-283.76" font-family="Arial" font-size="10.00">ALU1 -&gt; D -&gt; k </text>
+<text text-anchor="start" x="75.47" y="-283.76" font-family="Arial" font-style="italic" font-size="8.00" fill="#8a8a8a">only directly after ML_2 (delay flag)</text>
+<text text-anchor="start" x="6" y="-273.76" font-family="Arial" font-size="10.00">h -&gt; A -&gt; ALU1(+)</text>
+<text text-anchor="start" x="6" y="-263.76" font-family="Arial" font-size="10.00">k -&gt; B -&gt; ALU1(+)</text>
+<text text-anchor="start" x="6" y="-253.76" font-family="Arial" font-size="10.00">1 -&gt; A -&gt; ALU2(+)</text>
+<text text-anchor="start" x="6" y="-243.76" font-family="Arial" font-size="10.00">k -&gt; B -&gt; ALU2(+)</text>
+<text text-anchor="start" x="6" y="-233.76" font-family="Arial" font-size="10.00">1.0 -&gt; D -&gt; o </text>
+<text text-anchor="start" x="64.92" y="-233.76" font-family="Arial" font-style="italic" font-size="8.00" fill="#8a8a8a">only directly after ML_2 (delay flag)</text>
+<polygon fill="none" stroke="#2f5f8f" points="252,-256.36 252,-296.76 352,-296.76 352,-256.36 252,-256.36"/>
+<text text-anchor="start" x="255" y="-283.16" font-family="Arial" font-size="10.00">EML == 1: OL_1</text>
+<text text-anchor="start" x="255" y="-263.96" font-family="Arial" font-size="10.00">EML == 0: ML_2</text>
+<polygon fill="#7fffff" stroke="none" points="252,-226.76 252,-256.36 352,-256.36 352,-226.76 252,-226.76"/>
+<polygon fill="none" stroke="#2f5f8f" points="252,-226.76 252,-256.36 352,-256.36 352,-226.76 252,-226.76"/>
+<text text-anchor="start" x="257" y="-239.26" font-family="Arial" font-weight="bold" font-size="11.00">ML_1</text>
+<polygon fill="none" stroke="#2f5f8f" points="0,-225.76 0,-297.76 353,-297.76 353,-225.76 0,-225.76"/>
+</a>
+</g>
+</g>
+<!-- OL_1&#45;&gt;ML_1 -->
+<g id="edge3" class="edge">
+<title>OL_1:e-&gt;ML_1:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-363.36C368.2,-363.36 371.5,-302.14 360.72,-282.53"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="362.48,-280.35 354.44,-277.67 359.05,-284.78 362.48,-280.35"/>
+</g>
+<!-- OL_1&#45;&gt;ML_1 -->
+<!-- stub1 -->
+<g id="node9" class="node">
+<title>stub1</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M437.5,-368.76C437.5,-368.76 395.5,-368.76 395.5,-368.76 392.5,-368.76 389.5,-365.76 389.5,-362.76 389.5,-362.76 389.5,-356.76 389.5,-356.76 389.5,-353.76 392.5,-350.76 395.5,-350.76 395.5,-350.76 437.5,-350.76 437.5,-350.76 440.5,-350.76 443.5,-353.76 443.5,-356.76 443.5,-356.76 443.5,-362.76 443.5,-362.76 443.5,-365.76 440.5,-368.76 437.5,-368.76"/>
+<text text-anchor="middle" x="416.5" y="-356.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">→ HALT</text>
+</g>
+<!-- OL_1&#45;&gt;stub1 -->
+<g id="edge2" class="edge">
+<title>OL_1:e-&gt;stub1:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-379.36C366.25,-379.36 369.64,-368.11 378.63,-362.65"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="380.73,-364.99 387.74,-360.23 379.29,-359.58 380.73,-364.99"/>
+</g>
+<!-- ML_1&#45;&gt;OL_1 -->
+<g id="edge4" class="edge">
+<title>ML_1:e-&gt;OL_1:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-286.16C373.62,-286.16 377.4,-327.96 362.07,-339.72"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="361.42,-336.98 354.72,-342.18 363.2,-342.29 361.42,-336.98"/>
+</g>
+<!-- ML_2 -->
+<g id="node4" class="node">
+<title>ML_2</title>
+<g id="a_node4"><a xlink:title="ML_2">
+<polygon fill="none" stroke="#2f5f8f" points="1,-98.76 1,-192.76 252,-192.76 252,-98.76 1,-98.76"/>
+<text text-anchor="start" x="6" y="-178.76" font-family="Arial" font-size="10.00">ALU1 -&gt; D -&gt; ei</text>
+<text text-anchor="start" x="6" y="-166.76" font-family="Arial" font-size="10.00">sp -&gt; A -&gt; ALU1(+)</text>
+<text text-anchor="start" x="6" y="-154.76" font-family="Arial" font-size="10.00">k -&gt; B -&gt; ALU1(+)</text>
+<text text-anchor="start" x="6" y="-142.76" font-family="Arial" font-size="10.00">ALU2 -&gt; D -&gt; jplus1</text>
+<text text-anchor="start" x="6" y="-130.76" font-family="Arial" font-size="10.00">k -&gt; D -&gt; addr2</text>
+<text text-anchor="start" x="6" y="-118.76" font-family="Arial" font-size="10.00">h -&gt; A -&gt; ALU2(+)</text>
+<text text-anchor="start" x="6" y="-106.76" font-family="Arial" font-size="10.00">k -&gt; B -&gt; ALU2(+)</text>
+<polygon fill="none" stroke="#2f5f8f" points="252,-140.36 252,-192.76 352,-192.76 352,-140.36 252,-140.36"/>
+<text text-anchor="start" x="255" y="-176.16" font-family="Arial" font-size="10.00">EIL == 1: ML_1</text>
+<text text-anchor="start" x="255" y="-150.96" font-family="Arial" font-size="10.00">EIL == 0: IL_1</text>
+<polygon fill="#7fffff" stroke="none" points="252,-98.76 252,-140.36 352,-140.36 352,-98.76 252,-98.76"/>
+<polygon fill="none" stroke="#2f5f8f" points="252,-98.76 252,-140.36 352,-140.36 352,-98.76 252,-98.76"/>
+<text text-anchor="start" x="257" y="-117.26" font-family="Arial" font-weight="bold" font-size="11.00">ML_2</text>
+<polygon fill="none" stroke="#2f5f8f" points="0,-97.76 0,-193.76 353,-193.76 353,-97.76 0,-97.76"/>
+</a>
+</g>
+</g>
+<!-- ML_1&#45;&gt;ML_2 -->
+<g id="edge5" class="edge">
+<title>ML_1:e-&gt;ML_2:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-266.96C371.17,-266.96 374.61,-192.81 361.04,-171.96"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="362.71,-169.71 354.51,-167.57 359.59,-174.36 362.71,-169.71"/>
+</g>
+<!-- ML_1&#45;&gt;ML_2 -->
+<!-- stub5 -->
+<g id="node13" class="node">
+<title>stub5</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M472.39,-270.76C472.39,-270.76 394.61,-270.76 394.61,-270.76 391.61,-270.76 388.61,-267.76 388.61,-264.76 388.61,-264.76 388.61,-258.76 388.61,-258.76 388.61,-255.76 391.61,-252.76 394.61,-252.76 394.61,-252.76 472.39,-252.76 472.39,-252.76 475.39,-252.76 478.39,-255.76 478.39,-258.76 478.39,-258.76 478.39,-264.76 478.39,-264.76 478.39,-267.76 475.39,-270.76 472.39,-270.76"/>
+<text text-anchor="middle" x="433.5" y="-258.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">from SETUP, IL_2</text>
+</g>
+<!-- ML_1&#45;&gt;stub5 -->
+<g id="edge13" class="edge">
+<title>ML_1:e-&gt;stub5:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M364.32,-261.76C372.11,-261.76 377.36,-261.76 388.61,-261.76"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="362.82,-258.96 354.82,-261.76 362.82,-264.56 362.82,-258.96"/>
+</g>
+<!-- ML_2&#45;&gt;ML_1 -->
+<g id="edge6" class="edge">
+<title>ML_2:e-&gt;ML_1:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-179.16C363.05,-179.16 365.93,-218.79 359.63,-234.88"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="357.93,-232.62 354.28,-240.27 361.9,-236.57 357.93,-232.62"/>
+</g>
+<!-- HALT -->
+<g id="node5" class="node">
+<title>HALT</title>
+<g id="a_node5"><a xlink:title="HALT">
+<polygon fill="none" stroke="#2f5f8f" points="1,-7.56 1,-64.76 252,-64.76 252,-7.56 1,-7.56"/>
+<text text-anchor="start" x="6" y="-50.76" font-family="Arial" font-size="10.00">pipeline empty -&gt; D -&gt; ready</text>
+<polygon fill="none" stroke="#2f5f8f" points="252,-30.76 252,-64.76 352,-64.76 352,-30.76 252,-30.76"/>
+<text text-anchor="start" x="255" y="-52.76" font-family="Arial" font-size="10.00">load == 0: HALT</text>
+<text text-anchor="start" x="255" y="-36.76" font-family="Arial" font-size="10.00">load == 1: SETUP</text>
+<polygon fill="#7fffff" stroke="none" points="252,-7.56 252,-30.76 352,-30.76 352,-7.56 252,-7.56"/>
+<polygon fill="none" stroke="#2f5f8f" points="252,-7.56 252,-30.76 352,-30.76 352,-7.56 252,-7.56"/>
+<text text-anchor="start" x="257" y="-16.86" font-family="Arial" font-weight="bold" font-size="11.00">HALT</text>
+<polygon fill="none" stroke="#2f5f8f" points="0,-6.56 0,-65.76 353,-65.76 353,-6.56 0,-6.56"/>
+</a>
+</g>
+</g>
+<!-- ML_2&#45;&gt;HALT -->
+<!-- stub2 -->
+<g id="node10" class="node">
+<title>stub2</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M437.5,-154.76C437.5,-154.76 395.5,-154.76 395.5,-154.76 392.5,-154.76 389.5,-151.76 389.5,-148.76 389.5,-148.76 389.5,-142.76 389.5,-142.76 389.5,-139.76 392.5,-136.76 395.5,-136.76 395.5,-136.76 437.5,-136.76 437.5,-136.76 440.5,-136.76 443.5,-139.76 443.5,-142.76 443.5,-142.76 443.5,-148.76 443.5,-148.76 443.5,-151.76 440.5,-154.76 437.5,-154.76"/>
+<text text-anchor="middle" x="416.5" y="-142.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">→ IL_1</text>
+</g>
+<!-- ML_2&#45;&gt;stub2 -->
+<g id="edge7" class="edge">
+<title>ML_2:e-&gt;stub2:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-153.96C364.53,-153.96 369.68,-149.54 378.29,-147.19"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="380.12,-149.78 387.7,-145.99 379.41,-144.22 380.12,-149.78"/>
+</g>
+<!-- HALT&#45;&gt;HALT -->
+<g id="edge9" class="edge">
+<title>HALT:e-&gt;HALT:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M351,-55.76C365,-83.16 389,-83.16 389,-37.46 389,3.24 369.96,7.69 356.61,-11.18"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="354.49,-9.26 352.91,-17.59 359.34,-12.06 354.49,-9.26"/>
+</g>
+<!-- stub3 -->
+<g id="node11" class="node">
+<title>stub3</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M546.5,-45.16C546.5,-45.16 504.5,-45.16 504.5,-45.16 501.5,-45.16 498.5,-42.16 498.5,-39.16 498.5,-39.16 498.5,-33.16 498.5,-33.16 498.5,-30.16 501.5,-27.16 504.5,-27.16 504.5,-27.16 546.5,-27.16 546.5,-27.16 549.5,-27.16 552.5,-30.16 552.5,-33.16 552.5,-33.16 552.5,-39.16 552.5,-39.16 552.5,-42.16 549.5,-45.16 546.5,-45.16"/>
+<text text-anchor="middle" x="525.5" y="-33.16" font-family="Arial" font-size="10.00" fill="#2f5f8f">→ SETUP</text>
+</g>
+<!-- HALT&#45;&gt;stub3 -->
+<g id="edge8" class="edge">
+<title>HALT:e-&gt;stub3:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M352,-39.76C382.58,-39.76 377.55,-71.9 406.5,-81.76 430.06,-89.79 439.24,-90.61 462.5,-81.76 472.5,-77.96 473.75,-74.07 480.5,-65.76 487.23,-57.49 485.4,-46.21 488.99,-40.25"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="489.87,-42.94 495.86,-36.95 487.44,-37.89 489.87,-42.94"/>
+</g>
+<!-- stub6 -->
+<g id="node14" class="node">
+<title>stub6</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M456.44,-45.16C456.44,-45.16 412.56,-45.16 412.56,-45.16 409.56,-45.16 406.56,-42.16 406.56,-39.16 406.56,-39.16 406.56,-33.16 406.56,-33.16 406.56,-30.16 409.56,-27.16 412.56,-27.16 412.56,-27.16 456.44,-27.16 456.44,-27.16 459.44,-27.16 462.44,-30.16 462.44,-33.16 462.44,-33.16 462.44,-39.16 462.44,-39.16 462.44,-42.16 459.44,-45.16 456.44,-45.16"/>
+<text text-anchor="middle" x="434.5" y="-33.16" font-family="Arial" font-size="10.00" fill="#2f5f8f">from OL_1</text>
+</g>
+<!-- HALT&#45;&gt;stub6 -->
+<g id="edge14" class="edge">
+<title>HALT:e-&gt;stub6:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M364.31,-36.16C379.52,-36.16 387.03,-36.16 406.56,-36.16"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="362.82,-33.36 354.82,-36.16 362.82,-38.96 362.82,-33.36"/>
+</g>
+<!-- IL_2 -->
+<g id="node7" class="node">
+<title>IL_2</title>
+<g id="a_node7"><a xlink:title="IL_2">
+<polygon fill="none" stroke="#2f5f8f" points="573,-330.76 573,-388.76 824,-388.76 824,-330.76 573,-330.76"/>
+<text text-anchor="start" x="578" y="-374.76" font-family="Arial" font-size="10.00">ALU2 -&gt; D -&gt; jplus1</text>
+<text text-anchor="start" x="578" y="-362.76" font-family="Arial" font-size="10.00">jplus1 -&gt; D -&gt; addr2</text>
+<text text-anchor="start" x="578" y="-350.76" font-family="Arial" font-size="10.00">h -&gt; A -&gt; ALU2(+)</text>
+<text text-anchor="start" x="578" y="-338.76" font-family="Arial" font-size="10.00">jplus1 -&gt; B -&gt; ALU2(+)</text>
+<polygon fill="none" stroke="#2f5f8f" points="824,-354.36 824,-388.76 924,-388.76 924,-354.36 824,-354.36"/>
+<text text-anchor="start" x="827" y="-376.66" font-family="Arial" font-size="10.00">EIL == 0: IL_1</text>
+<text text-anchor="start" x="827" y="-360.46" font-family="Arial" font-size="10.00">EIL == 1: ML_1</text>
+<polygon fill="#7fffff" stroke="none" points="824,-330.76 824,-354.36 924,-354.36 924,-330.76 824,-330.76"/>
+<polygon fill="none" stroke="#2f5f8f" points="824,-330.76 824,-354.36 924,-354.36 924,-330.76 824,-330.76"/>
+<text text-anchor="start" x="829" y="-340.26" font-family="Arial" font-weight="bold" font-size="11.00">IL_2</text>
+<polygon fill="none" stroke="#2f5f8f" points="572,-329.76 572,-389.76 925,-389.76 925,-329.76 572,-329.76"/>
+</a>
+</g>
+</g>
+<!-- IL_1&#45;&gt;IL_2 -->
+<g id="edge10" class="edge">
+<title>IL_1:s-&gt;IL_2:n</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M748.5,-442.8C748.5,-422.72 748.5,-415.47 748.5,-399.2"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="751.3,-399.58 748.5,-391.58 745.7,-399.58 751.3,-399.58"/>
+</g>
+<!-- IL_1&#45;&gt;IL_2 -->
+<!-- stub7 -->
+<g id="node15" class="node">
+<title>stub7</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M1011.72,-478.76C1011.72,-478.76 967.28,-478.76 967.28,-478.76 964.28,-478.76 961.28,-475.76 961.28,-472.76 961.28,-472.76 961.28,-466.76 961.28,-466.76 961.28,-463.76 964.28,-460.76 967.28,-460.76 967.28,-460.76 1011.72,-460.76 1011.72,-460.76 1014.72,-460.76 1017.72,-463.76 1017.72,-466.76 1017.72,-466.76 1017.72,-472.76 1017.72,-472.76 1017.72,-475.76 1014.72,-478.76 1011.72,-478.76"/>
+<text text-anchor="middle" x="989.5" y="-466.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">from ML_2</text>
+</g>
+<!-- IL_1&#45;&gt;stub7 -->
+<g id="edge16" class="edge">
+<title>IL_1:e-&gt;stub7:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M936.27,-469.76C944.35,-469.76 949.69,-469.76 961.28,-469.76"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="934.82,-466.96 926.82,-469.76 934.82,-472.56 934.82,-466.96"/>
+</g>
+<!-- IL_2&#45;&gt;IL_1 -->
+<g id="edge12" class="edge">
+<title>IL_2:e-&gt;IL_1:e</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M924,-379.66C938.27,-379.66 941.46,-432.58 932.44,-451.19"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="930.63,-449.05 926.38,-456.38 934.28,-453.3 930.63,-449.05"/>
+</g>
+<!-- stub4 -->
+<g id="node12" class="node">
+<title>stub4</title>
+<path fill="none" stroke="#2f5f8f" stroke-dasharray="5,2" d="M1009.5,-368.76C1009.5,-368.76 967.5,-368.76 967.5,-368.76 964.5,-368.76 961.5,-365.76 961.5,-362.76 961.5,-362.76 961.5,-356.76 961.5,-356.76 961.5,-353.76 964.5,-350.76 967.5,-350.76 967.5,-350.76 1009.5,-350.76 1009.5,-350.76 1012.5,-350.76 1015.5,-353.76 1015.5,-356.76 1015.5,-356.76 1015.5,-362.76 1015.5,-362.76 1015.5,-365.76 1012.5,-368.76 1009.5,-368.76"/>
+<text text-anchor="middle" x="988.5" y="-356.76" font-family="Arial" font-size="10.00" fill="#2f5f8f">→ ML_1</text>
+</g>
+<!-- IL_2&#45;&gt;stub4 -->
+<g id="edge11" class="edge">
+<title>IL_2:e-&gt;stub4:w</title>
+<path fill="none" stroke="#2f5f8f" stroke-width="1.2" d="M924,-363.46C936.17,-363.46 941.61,-361.51 950.1,-360.44"/>
+<polygon fill="#2f5f8f" stroke="#2f5f8f" stroke-width="1.2" points="951.87,-363.14 959.69,-359.87 951.53,-357.55 951.87,-363.14"/>
+</g>
+<!-- stub6&#45;&gt;stub3 -->
+<!-- stub8&#45;&gt;stub0 -->
+</g>
+</svg>

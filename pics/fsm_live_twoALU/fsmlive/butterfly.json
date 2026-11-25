@@ -1,6 +1,8 @@
 {
   "title": "FFT",
-  "include": ["complex_ops.json"],
+  "include": [
+    "complex_ops.json"
+  ],
   "comment": "Comparators (equals32, not ALUs): EOL = (sp == N); EML = (k == N), k through the bypass MUX I125; EIL = (ei == next j). In ML_2, ei is ALU1 directly (mux_com_inner_loop_eil) and next j is ALU2 directly (mux_com_inner_loop_addr2). In IL_2, ei comes from the register and next j from ALU2.",
   "states": [
     {
@@ -12,8 +14,7 @@
         "0 -> D -> addr2",
         "1.0 -> D -> o",
         "1 -> A -> ALU1(+)",
-        "h -> B -> ALU1(+)",
-        "ALU1 -> D -> ei  only so that ei is not 0"
+        "h -> B -> ALU1(+)"
       ],
       "next": "ML_1"
     },
@@ -23,7 +24,10 @@
         "sp -> <<1 -> sp",
         "0 -> D -> k"
       ],
-      "next": { "EOL == 1": "HALT", "EOL == 0": "ML_1" },
+      "next": {
+        "EOL == 1": "HALT",
+        "EOL == 0": "ML_1"
+      },
       "comment": "EOL compares the old sp (before the shift). domega comes combinationally from the ROM delta_omega(sp), so there is nothing to do here for it."
     },
     {
@@ -33,9 +37,13 @@
         "h -> A -> ALU1(+)",
         "k -> B -> ALU1(+)",
         "1 -> A -> ALU2(+)",
-        "k -> B -> ALU2(+)"
+        "k -> B -> ALU2(+)",
+        "1.0 -> D -> o  only directly after ML_2 (delay flag)"
       ],
-      "next": { "EML == 1": "OL_1", "EML == 0": "ML_2" },
+      "next": {
+        "EML == 1": "OL_1",
+        "EML == 0": "ML_2"
+      },
       "comment": "P1 of the group's first butterfly. ALU1 computes ei = k + h, ALU2 computes the next j = k + 1. Directly after ML_2, k is the bypassed ALU1 output (MUX I125). So ALU1, ALU2 and EML already see the new k in the same cycle it is written."
     },
     {
@@ -49,8 +57,21 @@
         "h -> A -> ALU2(+)",
         "k -> B -> ALU2(+)"
       ],
-      "next": { "EIL == 1": "ML_1", "EIL == 0": "IL_1" },
+      "next": {
+        "EIL == 1": "ML_1",
+        "EIL == 0": "IL_1"
+      },
       "comment": "P2: addr2 = j = k, ALU2 computes addr1 = k + h. ALU1 computes the next k = k + sp, which is written one cycle later. EIL here means h == 1, i.e. one butterfly per group."
+    },
+    {
+      "id": "HALT",
+      "rt": [
+        "pipeline empty -> D -> ready"
+      ],
+      "next": {
+        "load == 1": "SETUP",
+        "load == 0": "HALT"
+      }
     },
     {
       "group": "INNER (butterfly loop)",
@@ -61,7 +82,8 @@
           "rt": [
             "ALU1 -> D -> k  only directly after ML_2 (delay flag)",
             "1 -> A -> ALU2(+)",
-            "jplus1 -> B -> ALU2(+)"
+            "jplus1 -> B -> ALU2(+)",
+            "1.0 -> D -> o  only directly after ML_2 (delay flag)"
           ],
           "next": "IL_2",
           "comment": "P1: ALU2 computes the next j = jplus1 + 1."
@@ -74,7 +96,10 @@
             "h -> A -> ALU2(+)",
             "jplus1 -> B -> ALU2(+)"
           ],
-          "next": { "EIL == 1": "ML_1", "EIL == 0": "IL_1" },
+          "next": {
+            "EIL == 1": "ML_1",
+            "EIL == 0": "IL_1"
+          },
           "comment": "P2: addr2 = j = old jplus1, ALU2 computes addr1 = j + h. EIL compares the next j (ALU2 output) with ei."
         }
       ]

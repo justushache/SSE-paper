@@ -14,20 +14,23 @@
 \contentsline {subsection}{\numberline {3.6}Unoptimierte komplexe FSM}{8}{subsection.3.6}%
 \contentsline {subsection}{\numberline {3.7}Optimierter Datenflussgraph - Pipelining}{8}{subsection.3.7}%
 \contentsline {subsection}{\numberline {3.8}Optimierte Datenpfadarchitektur - 2 ALUs}{12}{subsection.3.8}%
-\contentsline {subsection}{\numberline {3.9}Registertransferfolgen}{13}{subsection.3.9}%
-\contentsline {subsection}{\numberline {3.10}Zustandsgraph}{15}{subsection.3.10}%
-\contentsline {subsection}{\numberline {3.11}Gesamtschaltung}{15}{subsection.3.11}%
-\contentsline {section}{\numberline {4}Simulation}{16}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Verifikation}{16}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Schaltungssynthese}{16}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Layoutsynthese}{16}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Zusammenfassung}{17}{section.5}%
-\contentsline {section}{\numberline {A}Quellcode}{18}{appendix.1.A}%
-\contentsline {subsection}{\numberline {A.1}Referenzimplementierung}{18}{subsection.1.A.1}%
-\contentsline {subsection}{\numberline {A.2}FSM}{18}{subsection.1.A.2}%
-\contentsline {subsection}{\numberline {A.3}Controllogic}{18}{subsection.1.A.3}%
-\contentsline {section}{\numberline {B}Reports}{19}{appendix.1.B}%
-\contentsline {subsection}{\numberline {B.1}Area}{19}{subsection.1.B.1}%
-\contentsline {subsection}{\numberline {B.2}Power}{19}{subsection.1.B.2}%
-\contentsline {subsection}{\numberline {B.3}Timing}{19}{subsection.1.B.3}%
+\contentsline {subsection}{\numberline {3.9}Eigene Datenpfadelement}{13}{subsection.3.9}%
+\contentsline {subsubsection}{\numberline {3.9.1}Write-through Register}{13}{subsubsection.3.9.1}%
+\contentsline {subsubsection}{\numberline {3.9.2}delta omega ROM}{14}{subsubsection.3.9.2}%
+\contentsline {subsubsection}{\numberline {3.9.3}pow2}{14}{subsubsection.3.9.3}%
+\contentsline {subsubsection}{\numberline {3.9.4}comparator}{14}{subsubsection.3.9.4}%
+\contentsline {subsection}{\numberline {3.10}Gesamtschaltung}{15}{subsection.3.10}%
+\contentsline {section}{\numberline {4}Simulation}{17}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Verifikation}{17}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Schaltungssynthese}{17}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Layoutsynthese}{17}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Zusammenfassung}{18}{section.5}%
+\contentsline {section}{\numberline {A}Quellcode}{19}{appendix.1.A}%
+\contentsline {subsection}{\numberline {A.1}Referenzimplementierung}{19}{subsection.1.A.1}%
+\contentsline {subsection}{\numberline {A.2}FSM}{19}{subsection.1.A.2}%
+\contentsline {subsection}{\numberline {A.3}Controllogic}{19}{subsection.1.A.3}%
+\contentsline {section}{\numberline {B}Reports}{20}{appendix.1.B}%
+\contentsline {subsection}{\numberline {B.1}Area}{20}{subsection.1.B.1}%
+\contentsline {subsection}{\numberline {B.2}Power}{20}{subsection.1.B.2}%
+\contentsline {subsection}{\numberline {B.3}Timing}{20}{subsection.1.B.3}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
